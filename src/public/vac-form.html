@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Google-Form Style Student Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 20px;
+      color: #202124;
+    }
+
+    h2 {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      text-align: center;
+      color: #f7f9fa;
+      margin-bottom: 24px;
+    }
+
+    form {
+      background: white;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 24px 32px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(60, 64, 67, .3), 0 1px 1px rgba(60, 64, 67, .15);
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 6px;
+      margin-top: 18px;
+      font-size: 15px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    select,
+    input[type="file"] {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 15px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    input[type="file"]:focus {
+      border-color: #1a73e8;
+      outline: none;
+    }
+
+    .radio-group {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .radio-group label {
+      font-weight: normal;
+    }
+
+    button {
+      margin-top: 32px;
+      background-color: #1a73e8;
+      color: white;
+      font-size: 16px;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #155ab6;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      form {
+        padding: 20px;
+      }
+
+      .radio-group {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Student Registration Form</h2>
+  <form id="vacStudentForm">
+    <label for="studentName">Student Name *</label>
+    <input type="text" id="studentName" name="studentName" placeholder="Enter full name" required />
+
+    <label for="enrollmentNumber">Enrollment Number *</label>
+    <input type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Enter enrollment number" required />
+
+    <label for="phoneNumber">Phone Number *</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" required pattern="[0-9]{10}"
+      title="Enter 10 digit phone number" />
+
+    <label>Course Completed? *</label>
+    <div class="radio-group">
+      <label><input type="radio" name="courseCompleted" value="Yes" required /> Yes</label>
+      <label><input type="radio" name="courseCompleted" value="No" /> No</label>
+    </div>
+
+    <label for="sectionSelect">Select Section *</label>
+    <select id="sectionSelect" name="sectionSelect" required>
+      <option value="" disabled selected>Select your section</option>
+      <option value="A">Section A</option>
+      <option value="B">Section B</option>
+      <option value="C">Section C</option>
+      <option value="D">Section D</option>
+    </select>
+
+    <label for="courseSelect">Select Course *</label>
+    <select id="courseSelect" name="courseSelect" required>
+      <option value="" disabled selected>Select the course</option>
+      <!-- values must match the server's Student model enums -->
+      <option value="BBA">BBA</option>
+      <option value="BCA">BCA</option>
+      <option value="B.COM">B.COM</option>
+      <option value="MBA FT">MBA FT</option>
+    </select>
+
+    <label for="certificateUpload">Upload Certificate (PDF, JPG) *</label>
+    <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png" required />
+
+    <button type="submit">Submit</button>
+
+    <script>
+      // wire form submission to include vacId from query string
+      (function () {
+        const form = document.getElementById('vacStudentForm');
+        if (!form) return;
+
+        form.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const fd = new FormData(form);
+          const params = new URLSearchParams(window.location.search);
+          const vacId = params.get('vacId') || '';
+
+          const payload = {
+            vacId,
+            studentName: fd.get('studentName') || '',
+            enrollmentNumber: fd.get('enrollmentNumber') || '',
+            phoneNumber: fd.get('phoneNumber') || '',
+            courseCompleted: fd.get('courseCompleted') || '',
+            sectionSelect: fd.get('sectionSelect') || '',
+            courseSelect: fd.get('courseSelect') || '',
+            certificateFilename: (fd.get('certificateUpload') && typeof fd.get('certificateUpload').name === 'string') ? fd.get('certificateUpload').name : ''
+          };
+
+          try {
+            const res = await fetch('/api/vac/submissions', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+            });
+            const j = await res.json().catch(() => ({}));
+
+            // Surface DB validation / duplicate errors when Mongo is connected
+            if (!res.ok) {
+              const message = j && j.error ? j.error : (j && j.details ? j.details : res.statusText);
+              alert('Failed to submit: ' + message);
+              return;
+            }
+
+            alert('Thank you — your submission has been saved.');
+            form.reset();
+          } catch (err) {
+            console.error(err);
+            alert('Submission failed — please try again.');
+          }
+        });
+      })();
+
+
+      const form = document.getElementById('vacStudentForm');
+      // NOTE: submission saved to server above. We intentionally do not keep a duplicate local copy here
+      // to avoid diverging local and server data. The previous localStorage fallback is removed to prevent confusion.
+    </script>
+</body>
+
+</html>
+
+</body>
+
+</html>
