@@ -107,6 +107,25 @@
     <label for="studentName">Student Name *</label>
     <input type="text" id="studentName" name="studentName" placeholder="Enter full name" required />
 
+    <label for="courseSelect">Select Course *</label>
+    <select id="courseSelect" name="courseSelect" required>
+      <option value="" disabled selected>Select the course</option>
+      <!-- values must match the server's Student model enums -->
+      <option value="BBA">BBA</option>
+      <option value="BCA">BCA</option>
+      <option value="B.COM">B.COM</option>
+      <option value="MBA FT">MBA FT</option>
+    </select>
+
+    <label for="sectionSelect">Select Section *</label>
+    <select id="sectionSelect" name="sectionSelect" required>
+      <option value="" disabled selected>Select your section</option>
+      <option value="A">Section A</option>
+      <option value="B">Section B</option>
+      <option value="C">Section C</option>
+      <option value="D">Section D</option>
+    </select>
+
     <label for="enrollmentNumber">Enrollment Number *</label>
     <input type="text" id="enrollmentNumber" name="enrollmentNumber" placeholder="Enter enrollment number" required />
 
@@ -120,27 +139,9 @@
       <label><input type="radio" name="courseCompleted" value="No" /> No</label>
     </div>
 
-    <label for="sectionSelect">Select Section *</label>
-    <select id="sectionSelect" name="sectionSelect" required>
-      <option value="" disabled selected>Select your section</option>
-      <option value="A">Section A</option>
-      <option value="B">Section B</option>
-      <option value="C">Section C</option>
-      <option value="D">Section D</option>
-    </select>
 
-    <label for="courseSelect">Select Course *</label>
-    <select id="courseSelect" name="courseSelect" required>
-      <option value="" disabled selected>Select the course</option>
-      <!-- values must match the server's Student model enums -->
-      <option value="BBA">BBA</option>
-      <option value="BCA">BCA</option>
-      <option value="B.COM">B.COM</option>
-      <option value="MBA FT">MBA FT</option>
-    </select>
-
-    <label for="certificateUpload">Upload Certificate (PDF, JPG) *</label>
-    <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png" required />
+    <label for="certificateUpload">Upload Certificate (PDF, JPG, PNG, CSV) *</label>
+    <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png, .csv" required />
 
     <button type="submit">Submit</button>
 
@@ -150,7 +151,8 @@
         const form = document.getElementById('vacStudentForm');
         if (!form) return;
 
-        form.addEventListener('submit', async function (e) {
+        form.addEventListener('submit', 
+          async function (e) {
           e.preventDefault();
           const fd = new FormData(form);
           const params = new URLSearchParams(window.location.search);
@@ -169,9 +171,13 @@
 
           try {
             const res = await fetch('/api/vac/submissions', {
-              method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+              method: 'POST', 
+              headers: { 'Content-Type': 'application/json' }, 
+              body: JSON.stringify(payload)
             });
-            const j = await res.json().catch(() => ({}));
+            const j = await res
+            .json()
+            .catch(() => ({}));
 
             // Surface DB validation / duplicate errors when Mongo is connected
             if (!res.ok) {

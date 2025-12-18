@@ -6,8 +6,6 @@ import { authMiddleware } from "./auth.js";
 
 const router = express.Router();
 
-// file storage removed — DB-only for submissions and entries
-
 async function readSubmissions() {
   // require DB connection for submissions — submissions are stored ONLY in MongoDB
   if (
@@ -20,7 +18,8 @@ async function readSubmissions() {
   const docs = await Student.find({}).lean().exec();
   return docs.map((d) => ({
     id: d._id.toString(),
-    createdAt: d.timestamp
+    createdAt: d
+      .timestamp
       ? new Date(d.timestamp).toISOString()
       : d.createdAt || new Date().toISOString(),
     ...d,
@@ -429,9 +428,14 @@ router.delete("/submissions/:id", authMiddleware, async (req, res) => {
 
     // owner check: if not admin, ensure entry owner matches user
     if (req.user.role !== "admin" && stud.vacId) {
-      const entry = await VacEntry.findById(stud.vacId).exec();
+      const entry = await VacEntry
+        .findById(stud.vacId)
+        .exec();
+
       if (!entry || String(entry.createdBy || "") !== String(req.user.id))
-        return res.status(403).json({ error: "Forbidden" });
+        return res
+          .status(403)
+          .json({ error: "Forbidden" });
     }
 
     const r = await Student.findByIdAndDelete(id).exec();
@@ -445,7 +449,9 @@ router.delete("/submissions/:id", authMiddleware, async (req, res) => {
 // mark a submission as sent to program coordinator
 router.post("/submissions/:id/send", authMiddleware, async (req, res) => {
   try {
-    const id = req.params.id;
+    const id = req
+      .params
+      .id;
     if (!id) return res.status(400).json({ error: "Missing id" });
     // require DB connection
     if (
@@ -453,7 +459,9 @@ router.post("/submissions/:id/send", authMiddleware, async (req, res) => {
       !mongoose.connection ||
       mongoose.connection.readyState !== 1
     )
-      return res.status(503).json({ error: "DB not connected" });
+      return res
+        .status(503)
+        .json({ error: "DB not connected" });
 
     const s = await Student.findById(id).exec();
     if (!s) return res.status(404).json({ error: "Not found" });
@@ -466,7 +474,8 @@ router.post("/submissions/:id/send", authMiddleware, async (req, res) => {
     }
 
     s.sentToCoordinator = true;
-    s.sentToCoordinatorAt = new Date().toISOString();
+    s.sentToCoordinatorAt = new Date()
+      .toISOString();
     await s.save();
 
     res.json({ ok: true, id });

@@ -40,10 +40,17 @@ router.get("/entries", authMiddleware, async (req, res) => {
         }))
       );
     }
-    const docs = await Teaching.find({ createdBy: req.user?.id }).lean().exec();
-    return res.json(
-      docs.map((d) => ({ id: d._id.toString(), createdAt: d.createdAt, ...d }))
-    );
+    const docs = await Teaching
+      .find({ createdBy: req.user?.id })
+      .lean()
+      .exec();
+    return res
+      .json(
+        docs.map((d) => ({
+          id: d._id.toString(),
+          createdAt: d.createdAt, ...d
+        }))
+      );
   } catch (err) {
     console.error("Teaching entries error", err);
     res.status(500).json({ error: "Failed to fetch teaching entries" });
@@ -59,12 +66,17 @@ router.get("/entries/:id", authMiddleware, async (req, res) => {
       req.user.role !== "admin" &&
       String(doc.createdBy || "") !== String(req.user.id)
     )
-      return res.status(403).json({ error: "Forbidden" });
-    return res.json({
-      id: doc._id.toString(),
-      createdAt: doc.createdAt,
-      ...doc,
-    });
+      return res
+        .status(403)
+        .json({ error: "Forbidden" });
+    return res
+      .json({
+        id: doc._id
+          .toString(),
+        createdAt: doc
+          .createdAt,
+        ...doc,
+      });
   } catch (err) {
     console.error("Teaching read error", err);
     res.status(500).json({ error: "Failed to read teaching entry" });
