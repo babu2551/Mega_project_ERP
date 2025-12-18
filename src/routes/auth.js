@@ -12,11 +12,20 @@ router.post("/register", async (req, res) => {
     try {
         const { username, password, role } = req.body;
 
-        if (!username || !password || !role) return res.status(400).json({ error: 'username, password and role are required' });
+        if (!username || !password || !role)
+            return res
+                .status(400)
+                .json({ error: 'username, password and role are required' });
 
         // prevent duplicate username+role
-        const existing = await User.findOne({ username, role }).exec();
-        if (existing) return res.status(409).json({ error: 'User already exists for the given role' });
+        const existing = await User
+            .findOne({ username, role })
+            .exec();
+
+        if (existing)
+            return res
+                .status(409)
+                .json({ error: 'User already exists for the given role' });
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -26,7 +35,9 @@ router.post("/register", async (req, res) => {
         res.json({ message: "User registered successfully" });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Server error" });
+        res
+            .status(500)
+            .json({ error: "Server error" });
     }
 });
 
@@ -35,19 +46,27 @@ router.post("/login", async (req, res) => {
     try {
         const { username, password, role } = req.body;
 
-        if (!username || !password || !role) return res.status(400).json({ error: 'username, password and role are required' });
+        if (!username || !password || !role)
+            return res
+                .status(400)
+                .json({ error: 'username, password and role are required' });
 
         const user = await User.findOne({ username, role }).exec();
+        
         if (!user) {
-            return res.status(404).json({ error: "User not found" });
+            return res
+                .status(404)
+                .json({ error: "User not found" });
         }
 
         // If user.password doesn't look like a bcrypt hash (no $2a$ / $2b$) we may have an older plaintext record.
         // Support backward-compatible login: if plaintext equals provided password, hash it and save so future logins use bcrypt.
         const pw = user.password || '';
         let isMatch = false;
+
         if (pw.startsWith('$2')) {
-            isMatch = await bcrypt.compare(password, pw);
+            isMatch = await bcrypt
+                .compare(password, pw);
         } else if (pw === password) {
             // legacy store: plaintext match — migrate to hashed password
             try {
@@ -60,7 +79,10 @@ router.post("/login", async (req, res) => {
             }
         }
 
-        if (!isMatch) return res.status(401).json({ error: "Wrong password" });
+        if (!isMatch)
+            return res
+                .status(401)
+                .json({ error: "Wrong password" });
 
         const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
 
@@ -72,7 +94,9 @@ router.post("/login", async (req, res) => {
         });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Server error" });
+        res
+            .status(500)
+            .json({ error: "Server error" });
     }
 });
 
@@ -80,7 +104,9 @@ router.post("/login", async (req, res) => {
 export const authMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
-        return res.status(401).json({ error: "No token, authorization denied" });
+        return res
+            .status(401)
+            .json({ error: "No token, authorization denied" });
     }
 
     try {
@@ -88,7 +114,9 @@ export const authMiddleware = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (err) {
-        res.status(401).json({ error: "Token is not valid" });
+        res
+            .status(401)
+            .json({ error: "Token is not valid" });
     }
 };
 

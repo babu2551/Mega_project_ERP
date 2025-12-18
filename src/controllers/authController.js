@@ -6,15 +6,21 @@ export const login = async (req, res) => {
         const { username, password, role } = req.body;
 
         if (!username || !password || !role) {
-            return res.status(400).json({ message: "All fields required" });
+            return res
+            .status(400)
+            .json({ message: "All fields required" });
         }
 
         const user = await User.findOne({ username, role });
 
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user) return res
+        .status(404)
+        .json({ message: "User not found" });
 
         if (user.password !== password) {
-            return res.status(401).json({ message: "Invalid password" });
+            return res
+            .status(401)
+            .json({ message: "Invalid password" });
         }
 
         // JWT Token
@@ -30,6 +36,8 @@ export const login = async (req, res) => {
             token,
         });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res
+        .status(500)
+        .json({ error: err.message });
     }
 };
