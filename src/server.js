@@ -13,9 +13,6 @@ import VacEntry from "./models/vac-model.js";
 import econtentRoutes from "./routes/econtent.js";
 import capacityRoutes from "./routes/capacity.js";
 import teachingRoutes from "./routes/teaching.js";
-import learnerRoutes from "./routes/learner-support.js";
-import experientialRoutes from "./routes/experiential.js";
-import libraryRoutes from "./routes/library.js";
 
 dotenv.config();
 connectDB();
@@ -72,9 +69,6 @@ app.use("/api/pc", upload.single("brochureFile"), pcRoutes);
 app.use("/api/econtent", upload.single("documentFile"), econtentRoutes);
 app.use("/api/capacity", upload.single("documentFile"), capacityRoutes);
 app.use("/api/teaching", upload.single("documentFile"), teachingRoutes);
-app.use("/api/learner-support", upload.single("documentFile"), learnerRoutes);
-app.use("/api/experiential", upload.single("documentFile"), experientialRoutes);
-app.use("/api/library", upload.single("documentFile"), libraryRoutes);
 
 // Simple DB health endpoint — returns mongoose connection status and total student count if available
 app.get("/api/db/status", async (req, res) => {
