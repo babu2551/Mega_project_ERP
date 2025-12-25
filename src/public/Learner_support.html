@@ -1,298 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Learners’ Support: Advanced & Slow Learners Form</title>
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
 
-      body {
-        background-color: #f0f4f8;
-        /* Light grey/blue background */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 20px;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learners’ Support: Advanced & Slow Learners Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-      /* Main Form Card */
+    body {
+      background-color: #f0f4f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
 
-      .form-container {
-        background-color: white;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 900px;
-        overflow: hidden;
-      }
+    .form-container {
+      background-color: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 900px;
+      overflow: hidden;
+    }
 
-      /* Gradient Header */
+    .form-header {
+      background: linear-gradient(90deg, #5b86e5 0%, #904e95 100%);
+      padding: 25px;
+      text-align: center;
+      color: white;
+    }
 
-      .form-header {
-        background: linear-gradient(90deg, #5b86e5 0%, #904e95 100%);
-        /* Blue to Purple Gradient */
+    .form-header h2 {
+      font-weight: 500;
+      font-size: 1.5rem;
+    }
 
-        padding: 25px;
-        text-align: center;
-        color: white;
-      }
+    .form-body {
+      padding: 30px;
+    }
 
-      .form-header h2 {
-        font-weight: 500;
-        font-size: 1.5rem;
-      }
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
 
-      /* Form Body */
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
 
-      .form-body {
-        padding: 30px;
-      }
+    .input-group label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+      font-size: 0.9rem;
+    }
 
-      /* Grid Layout for Inputs (3 rows of 2 fields) */
+    .required {
+      color: red;
+      margin-left: 3px;
+    }
 
+    .input-group input {
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #333;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #904e95;
+    }
+
+    .input-group input::placeholder {
+      color: #888;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .form-footer {
+      margin-top: 10px;
+    }
+
+    .submit-btn {
+      background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%);
+      border: none;
+      width: 100%;
+      padding: 15px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .submit-btn:hover {
+      opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
       .input-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        /* Two columns */
-        gap: 20px;
-        margin-bottom: 25px;
+        grid-template-columns: 1fr;
       }
+    }
 
-      /* Input Group Styling */
+    /* popup  section*/
+    /* .btn {
+            padding: 10px 60px;
+            background: #fff;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 500;
+            border-radius: 30px;
+        } */
 
-      .input-group {
-        display: flex;
-        flex-direction: column;
-      }
+    .popup {
+      width: 400px;
+      background: #fff;
+      border-radius: 6px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      text-align: center;
+      padding: 0 30px 30px;
+      color: #333;
+      visibility: hidden;
+      transition: transform 0.4s, top 0.4s;
+    }
 
-      .input-group label {
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #333;
-        font-size: 0.9rem;
-      }
+    .open-popup {
+      visibility: visible;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+    }
 
-      .required {
-        color: red;
-        margin-left: 3px;
-      }
+    .popup img {
+      width: 100px;
+      margin-top: -50px;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
 
-      .input-group input {
-        padding: 12px 15px;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        color: #333;
-        transition: border-color 0.3s;
-      }
+    .popup h2 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 30px 0 10px;
+    }
 
-      .input-group input:focus {
-        outline: none;
-        border-color: #904e95;
-      }
+    .popup button {
+      width: 100%;
+      margin-top: 50px;
+      padding: 10px 0;
+      background: #6fd649;
+      color: #fff;
+      border: 0;
+      outline: none;
+      border-radius: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
 
-      .input-group input::placeholder {
-        color: #888;
-      }
+<body>
+  <div class="form-container">
 
-      /* Full width for specific fields (e.g., Measures Taken) */
+    <div class="form-header">
+      <h2>Learners’ Support: Advanced & Slow Learners</h2>
+    </div>
 
-      .full-width {
-        grid-column: span 2;
-      }
+    <form class="form-body">
 
-      /* Submit Button Area */
+      <div class="input-grid">
 
-      .form-footer {
-        margin-top: 10px;
-      }
+        <div class="input-group">
+          <label>Criteria Used for Identification <span class="required">*</span></label>
+          <input type="text" id="criteriaUsed"
+            placeholder="e.g., Previous year's results, Mid-term scores, Faculty recommendation" />
+        </div>
 
-      .submit-btn {
-        background: linear-gradient(90deg, #00b09b 0%, #96c93d 100%);
-        /* Green Gradient */
+        <div class="input-group">
+          <label>No. of Slow Learners<span class="required">*</span></label>
+          <input type="number" id="slowLearnersCount" placeholder="e.g., 25" />
+        </div>
 
-        border: none;
-        width: 100%;
-        padding: 15px;
-        color: white;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: opacity 0.3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-      }
+        <div class="input-group">
+          <label>No. of Advanced Learners<span class="required">*</span></label>
+          <input type="number" id="advancedLearnersCount" placeholder="e.g., 15" />
+        </div>
 
-      .submit-btn:hover {
-        opacity: 0.9;
-      }
+        <div class="input-group">
+          <label>Outcome Achieved<span class="required">*</span></label>
+          <input type="text" placeholder="Improvement % (e.g., 20% improvement in pass rate)" />
+        </div>
 
-      /* Responsive Design for Mobile */
+        <div class="input-group full-width">
+          <label>Measures Taken<span class="required">*</span></label>
+          <input type="text" placeholder="Remedial classes, mentoring, special tasks, attach MoM" />
+        </div>
 
-      @media (max-width: 600px) {
-        .input-grid {
-          grid-template-columns: 1fr;
-          /* Stack columns on mobile */
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="form-container">
-      <div class="form-header">
-        <h2>Learners’ Support: Advanced & Slow Learners</h2>
+        <div class="input-group full-width">
+          <label>Evidence Link<span class="required">*</span></label>
+          <input type="url" placeholder="From mentors (e.g., Shared Drive link to mentor reports)" />
+        </div>
       </div>
 
-      <form class="form-body">
-        <div class="input-grid">
-          <div class="input-group">
-            <label
-              >Criteria Used for Identification<span class="required"
-                >*</span
-              ></label
-            >
+      <div class="form-footer">
+        <button type="submit" class="submit-btn">
+          <span>&#10003;</span> Submit Support Details
+        </button>
 
-            <input
-              type="text"
-              id="criteriaUsed"
-              placeholder="e.g., Previous year's results, Mid-term scores, Faculty recommendation"
-            />
-          </div>
-
-          <div class="input-group">
-            <label>No. of Slow Learners<span class="required">*</span></label>
-
-            <input
-              type="number"
-              id="slowLearnersCount"
-              placeholder="e.g., 25"
-            />
-          </div>
-
-          <div class="input-group">
-            <label
-              >No. of Advanced Learners<span class="required">*</span></label
-            >
-
-            <input
-              type="number"
-              id="advancedLearnersCount"
-              placeholder="e.g., 15"
-            />
-          </div>
-
-          <div class="input-group">
-            <label>Outcome Achieved<span class="required">*</span></label>
-
-            <input
-              type="text"
-              placeholder="Improvement % (e.g., 20% improvement in pass rate)"
-            />
-          </div>
-
-          <div class="input-group full-width">
-            <label>Measures Taken<span class="required">*</span></label>
-
-            <input
-              type="text"
-              placeholder="Remedial classes, mentoring, special tasks, attach MoM"
-            />
-          </div>
-
-          <div class="input-group full-width">
-            <label>Evidence Link<span class="required">*</span></label>
-
-            <input
-              type="url"
-              placeholder="From mentors (e.g., Shared Drive link to mentor reports)"
-            />
-          </div>
+        <div class="popup" id="popup">
+          <img src="../images/check.jpg" alt="Check Mark">
+          <h2>Thank You!</h2>
+          <p>Your Form Successfully Submitted. Thanks!</p>
+          <button type="button" onclick="closePopup()">OK</button>
         </div>
 
-        <div class="form-footer">
-          <button type="submit" class="submit-btn">
-            <span>&#10003;</span> Submit Support Details
-          </button>
-        </div>
-      </form>
-    </div>
-    <script>
-      function qs(name) {
-        const u = new URLSearchParams(window.location.search);
-        return u.get(name) || "";
-      }
+      </div>
 
-      document.querySelector("form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const btn = e.target.querySelector("button");
-        btn.disabled = true;
-        btn.textContent = "Submitting...";
-        const payload = {
-          criteriaUsed: document.getElementById("criteriaUsed").value,
-          slowLearnersCount: Number(
-            document.getElementById("slowLearnersCount").value || 0
-          ),
-          advancedLearnersCount: Number(
-            document.getElementById("advancedLearnersCount").value || 0
-          ),
-          outcome: document.getElementById("outcome").value,
-          measuresTaken: document.getElementById("measuresTaken").value,
-          evidenceLink: document.getElementById("evidenceLink").value,
-          programmeCode: qs("code"),
-          programmeName: qs("name"),
-          courseCode: qs("course"),
-        };
+    </form>
 
-        const token = localStorage.getItem("token");
+  </div>
+
+  <script>
+
+    let popup = document.getElementById("popup");
+    function openPopup() {
+      popup.classList.add("open-popup");
+    }
+    function closePopup() {
+      popup.classList.remove("open-popup");
+    }
+
+    function qs(name) {
+      const u = new URLSearchParams(window.location.search);
+      return u.get(name) || "";
+    }
+
+    document.querySelector("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = e
+        .target
+        .querySelector("button");
+
+      btn.disabled = true;
+
+      btn.textContent = "Submitting...";
+
+      const payload = {
+        criteriaUsed: document.getElementById("criteriaUsed").value,
+        slowLearnersCount: Number(
+          document.getElementById("slowLearnersCount").value || 0
+        ),
+        advancedLearnersCount: Number(
+          document.getElementById("advancedLearnersCount").value || 0
+        ),
+        outcome: document.getElementById("outcome").value,
+        measuresTaken: document.getElementById("measuresTaken").value,
+        evidenceLink: document.getElementById("evidenceLink").value,
+        programmeCode: qs("code"),
+        programmeName: qs("name"),
+        courseCode: qs("course"),
+      };
+
+      const token = localStorage.getItem("token");
+      try {
+        const res = await fetch("/api/learner-support/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        let data;
         try {
-          const res = await fetch("/api/learner-support/submit", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-            body: JSON.stringify(payload),
-          });
-          let data;
-          try {
-            data = await res.json();
-          } catch (e) {
-            data = { raw: await res.text() };
-          }
-          console.log("learner submit", res.status, data);
-          if (!res.ok) {
-            if (res.status === 401) alert("Not authenticated — please login");
-            else alert(data.error || data.message || "Failed to submit");
-            btn.disabled = false;
-            btn.textContent = "Submit Support Details";
-            return;
-          }
-          alert("Submitted successfully");
-          const q = [];
-          if (payload.programmeCode)
-            q.push("code=" + encodeURIComponent(payload.programmeCode));
-          if (payload.programmeName)
-            q.push("name=" + encodeURIComponent(payload.programmeName));
-          window.location.href =
-            "pcdashboard.html" + (q.length ? "?" + q.join("&") : "");
-        } catch (err) {
-          console.error(err);
-          alert("Server error while submitting");
+          data = await res.json();
+        } catch (e) {
+          data = { raw: await res.text() };
+        }
+        console.log("learner submit", res.status, data);
+        if (!res.ok) {
+          if (res.status === 401) alert("Not authenticated — please login");
+          else alert(data.error || data.message || "Failed to submit");
           btn.disabled = false;
           btn.textContent = "Submit Support Details";
+          return;
         }
-      });
-    </script>
-  </body>
+        openPopup();
+        // alert("Submitted successfully");
+
+        const q = [];
+        if (payload.programmeCode)
+          q.push("code=" + encodeURIComponent(payload.programmeCode));
+        if (payload.programmeName)
+          q.push("name=" + encodeURIComponent(payload.programmeName));
+        window.location.href =
+          "pcdashboard.html" + (q.length ? "?" + q.join("&") : "");
+      } catch (err) {
+        console.error(err);
+        alert("Server error while submitting");
+        btn.disabled = false;
+        btn.textContent = "Submit Support Details";
+      }
+    });
+  </script>
+</body>
+
 </html>

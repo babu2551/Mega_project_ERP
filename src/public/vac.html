@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SECTION C - Value-Added Courses (VAC)</title>
+  <title>Link Generate Form</title>
   <style>
     * {
       margin: 0;
@@ -281,11 +281,14 @@
 
     <div class="form-container">
 
-      <!-- Course Form -->
       <div id="coursesContainer">
+
         <div class="course-section" data-course-id="1">
+
           <div class="course-title">📚 Course Details</div>
+
           <div class="form-grid">
+
             <div class="form-group">
               <label for="courseName1">Course Name *</label>
               <input type="text" id="courseName1" placeholder="e.g., Web Development" required>
@@ -330,18 +333,21 @@
               <input type="text" id="coordinator1" placeholder="e.g., Dr. John Doe" required>
               <div class="error-message" id="coordinatorError1">Coordinator name is required</div>
             </div>
+
           </div>
+
         </div>
+
       </div>
 
-      <!-- NEW BUTTON GROUP -->
+
       <div class="button-group">
         <button id="submitVacBtn" class="submit-btn">✅ Link Generate </button>
         <a href="vac_view.html" class="view-btn" target="_blank">📊 Dashboard</a>
         <a href="submit-VAC-form.html" class="form-btn" target="_blank">📩 Form</a>
       </div>
 
-      <!-- Success Section -->
+
       <div id="successSection" class="success-section">
         <div class="success-icon">🎉</div>
         <h3>VAC Data Saved Successfully!</h3>
@@ -354,13 +360,13 @@
   </div>
 
   <script>
-    // Elements
+
     const submitBtn = document.getElementById('submitVacBtn');
     const successSection = document.getElementById('successSection');
     const studentLink = document.getElementById('studentFormLink');
     const copyBtn = document.getElementById('copyBtn');
 
-    // Validate single course form
+
     function validateCourse1() {
       const fields = [
         { id: 'courseName1', error: 'courseNameError1', msg: 'Course name is required' },
@@ -426,12 +432,19 @@
         const id = section.dataset.courseId;
         courses.push({
           courseName: document.getElementById(`courseName${id}`).value.trim(),
+
           courseCode: document.getElementById(`courseCode${id}`).value.trim(),
+
           duration: Number(document.getElementById(`duration${id}`).value) || 0,
+
           timesOffered: Number(document.getElementById(`timesOffered${id}`).value) || 0,
+
           studentsEnrolled: document.getElementById(`studentsEnrolled${id}`).value.trim(),
+
           studentsCompleted: document.getElementById(`studentsCompleted${id}`).value.trim(),
+
           brochureLink: document.getElementById(`brochureLink${id}`).value.trim(),
+
           coordinator: document.getElementById(`coordinator${id}`).value.trim()
         });
       });
@@ -443,9 +456,16 @@
         const token = localStorage.getItem('token');
         if (token) headers['Authorization'] = 'Bearer ' + token;
 
-        const res = await fetch('/api/vac/entries', { method: 'POST', headers, body: JSON.stringify(entryPayload) });
+        const res = await fetch('/api/vac/entries', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(entryPayload)
+        });
 
-        const body = await res.json().catch(() => ({}));
+        const body = await res
+          .json()
+          .catch(() => ({})
+          );
 
         if (!res.ok) {
           const message = (body && (body.error || body.details)) || res.statusText || 'Unknown error';
@@ -474,19 +494,24 @@
     // Copy link
     copyBtn.addEventListener('click', function () {
       const url = studentLink.href;
-      navigator.clipboard.writeText(url).then(() => {
-        this.textContent = '✅ Copied!';
-        setTimeout(() => this.textContent = '📋 Copy Registration Link', 2000);
-      }).catch(() => {
-        // Fallback
-        const textarea = document.createElement('textarea');
-        textarea.value = url;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        alert('✅ Link copied!');
-      });
+      navigator
+        .clipboard
+        .writeText(url)
+        .then(() => {
+          this.textContent = '✅ Copied!';
+          setTimeout(() => this.textContent = '📋 Copy Registration Link', 2000);
+        }).catch(() => {
+          // Fallback
+          const textarea = document.createElement('textarea');
+          textarea.value = url;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand('copy');
+          document
+            .body
+            .removeChild(textarea);
+          alert('✅ Link copied!');
+        });
     });
   </script>
 </body>

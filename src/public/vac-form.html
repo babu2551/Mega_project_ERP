@@ -86,7 +86,6 @@
       background-color: #155ab6;
     }
 
-    /* Responsive */
     @media (max-width: 480px) {
       form {
         padding: 20px;
@@ -96,6 +95,66 @@
         flex-direction: column;
         align-items: flex-start;
       }
+    }
+
+    /* popup  section*/
+    /* .btn {
+            padding: 10px 60px;
+            background: #fff;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 500;
+            border-radius: 30px;
+        } */
+
+    .popup {
+      width: 400px;
+      background: #fff;
+      border-radius: 6px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      text-align: center;
+      padding: 0 30px 30px;
+      color: #333;
+      visibility: hidden;
+      transition: transform 0.4s, top 0.4s;
+    }
+
+    .open-popup {
+      visibility: visible;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup img {
+      width: 100px;
+      margin-top: -50px;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup h2 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 30px 0 10px;
+    }
+
+    .popup button {
+      width: 100%;
+      margin-top: 50px;
+      padding: 10px 0;
+      background: #6fd649;
+      color: #fff;
+      border: 0;
+      outline: none;
+      border-radius: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
@@ -110,10 +169,10 @@
     <label for="courseSelect">Select Course *</label>
     <select id="courseSelect" name="courseSelect" required>
       <option value="" disabled selected>Select the course</option>
-      <!-- values must match the server's Student model enums -->
       <option value="BBA">BBA</option>
       <option value="BCA">BCA</option>
       <option value="B.COM">B.COM</option>
+      <option value="MCA">MCA</option>
       <option value="MBA FT">MBA FT</option>
     </select>
 
@@ -124,6 +183,10 @@
       <option value="B">Section B</option>
       <option value="C">Section C</option>
       <option value="D">Section D</option>
+      <option value="E">Section E</option>
+      <option value="F">Section F</option>
+      <option value="G">Section G</option>
+      <option value="H">Section H</option>
     </select>
 
     <label for="enrollmentNumber">Enrollment Number *</label>
@@ -142,63 +205,77 @@
 
     <label for="certificateUpload">Upload Certificate (PDF, JPG, PNG, CSV) *</label>
     <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png, .csv" required />
+    <!-- popup section -->
+    <button type="submit" class="btn">Submit</button>
 
-    <button type="submit">Submit</button>
+    <div class="popup" id="popup">
+      <img src="../images/check.jpg" alt="Check Mark">
+      <h2>Thank You!</h2>
+      <p>Your Form Successfully Submitted. Thanks!</p>
+      <button type="button" onclick="closePopup()">OK</button>
+    </div>
 
     <script>
-      // wire form submission to include vacId from query string
+      let popup = document.getElementById("popup");
+      function openPopup() {
+        popup.classList.add("open-popup");
+      }
+      function closePopup() {
+        popup.classList.remove("open-popup");
+      }
+
       (function () {
         const form = document.getElementById('vacStudentForm');
         if (!form) return;
 
-        form.addEventListener('submit', 
+        form.addEventListener('submit',
           async function (e) {
-          e.preventDefault();
-          const fd = new FormData(form);
-          const params = new URLSearchParams(window.location.search);
-          const vacId = params.get('vacId') || '';
+            e.preventDefault();
+            const fd = new FormData(form);
+            const params = new URLSearchParams(window.location.search);
+            const vacId = params.get('vacId') || '';
 
-          const payload = {
-            vacId,
-            studentName: fd.get('studentName') || '',
-            enrollmentNumber: fd.get('enrollmentNumber') || '',
-            phoneNumber: fd.get('phoneNumber') || '',
-            courseCompleted: fd.get('courseCompleted') || '',
-            sectionSelect: fd.get('sectionSelect') || '',
-            courseSelect: fd.get('courseSelect') || '',
-            certificateFilename: (fd.get('certificateUpload') && typeof fd.get('certificateUpload').name === 'string') ? fd.get('certificateUpload').name : ''
-          };
+            const payload = {
+              vacId,
+              studentName: fd.get('studentName') || '',
+              enrollmentNumber: fd.get('enrollmentNumber') || '',
+              phoneNumber: fd.get('phoneNumber') || '',
+              courseCompleted: fd.get('courseCompleted') || '',
+              sectionSelect: fd.get('sectionSelect') || '',
+              courseSelect: fd.get('courseSelect') || '',
+              certificateFilename: (fd.get('certificateUpload') && typeof fd.get('certificateUpload').name === 'string') ? fd.get('certificateUpload').name : ''
+            };
 
-          try {
-            const res = await fetch('/api/vac/submissions', {
-              method: 'POST', 
-              headers: { 'Content-Type': 'application/json' }, 
-              body: JSON.stringify(payload)
-            });
-            const j = await res
-            .json()
-            .catch(() => ({}));
+            try {
+              const res = await fetch('/api/vac/submissions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+              const j = await res
+                .json()
+                .catch(() => ({})
+                );
 
-            // Surface DB validation / duplicate errors when Mongo is connected
-            if (!res.ok) {
-              const message = j && j.error ? j.error : (j && j.details ? j.details : res.statusText);
-              alert('Failed to submit: ' + message);
-              return;
+
+              if (!res.ok) {
+                const message = j && j.error ? j.error : (j && j.details ? j.details : res.statusText);
+                alert('Failed to submit: ' + message);
+                return;
+              }
+              openPopup();
+              form.reset();
+            } 
+            catch (err) {
+              console.error(err);
+              alert('Submission failed — please try again.');
             }
-
-            alert('Thank you — your submission has been saved.');
-            form.reset();
-          } catch (err) {
-            console.error(err);
-            alert('Submission failed — please try again.');
-          }
-        });
+          });
       })();
 
 
       const form = document.getElementById('vacStudentForm');
-      // NOTE: submission saved to server above. We intentionally do not keep a duplicate local copy here
-      // to avoid diverging local and server data. The previous localStorage fallback is removed to prevent confusion.
+
     </script>
 </body>
 

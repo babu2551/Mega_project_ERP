@@ -15,15 +15,12 @@
 
     body {
       background-color: #f0f4f8;
-      /* Light grey/blue background */
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 20px;
     }
-
-    /* Main Form Card */
 
     .form-container {
       background-color: white;
@@ -33,8 +30,6 @@
       max-width: 900px;
       overflow: hidden;
     }
-
-    /* Gradient Header */
 
     .form-header {
       background: linear-gradient(90deg,
@@ -50,23 +45,16 @@
       font-size: 1.5rem;
     }
 
-    /* Form Body */
-
     .form-body {
       padding: 30px;
     }
 
-    /* Grid Layout for Inputs */
-
     .input-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      /* Two columns */
       gap: 20px;
       margin-bottom: 25px;
     }
-
-    /* Input Group Styling */
 
     .input-group {
       display: flex;
@@ -103,13 +91,9 @@
       color: #888;
     }
 
-    /* Full width for specific fields (all of them since there are 4) */
-
     .full-width {
       grid-column: span 2;
     }
-
-    /* Submit Button Area */
 
     .form-footer {
       margin-top: 10px;
@@ -119,7 +103,6 @@
       background: linear-gradient(90deg,
           #00b09b 0%,
           #96c93d 100%);
-      /* Green Gradient */
       border: none;
       width: 100%;
       padding: 15px;
@@ -139,76 +122,167 @@
       opacity: 0.9;
     }
 
-    /* Responsive Design for Mobile */
 
     @media (max-width: 600px) {
       .input-grid {
         grid-template-columns: 1fr;
-        /* Stack columns on mobile */
       }
+    }
+
+    /* popup  section*/
+    /* .btn {
+            padding: 10px 60px;
+            background: #fff;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 500;
+            border-radius: 30px;
+        } */
+
+    .popup {
+      width: 400px;
+      background: #fff;
+      border-radius: 6px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      text-align: center;
+      padding: 0 30px 30px;
+      color: #333;
+      visibility: hidden;
+      transition: transform 0.4s, top 0.4s;
+    }
+
+    .open-popup {
+      visibility: visible;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup img {
+      width: 100px;
+      margin-top: -50px;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup h2 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 30px 0 10px;
+    }
+
+    .popup button {
+      width: 100%;
+      margin-top: 50px;
+      padding: 10px 0;
+      background: #6fd649;
+      color: #fff;
+      border: 0;
+      outline: none;
+      border-radius: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
 
 <body>
   <div class="form-container">
+
     <div class="form-header">
       <h2>Library & Learning Resources</h2>
     </div>
 
     <form class="form-body">
+
       <div class="input-grid">
+
         <div class="input-group full-width">
           <label>Books Recommended for Library for the Programme<span class="required">*</span></label>
-
           <input type="text" id="booksRecommended"
             placeholder="Title, Author, Year (e.g., Data Structures, Aho, 2010)" />
         </div>
 
         <div class="input-group half-width">
           <label>No. of New Books Added<span class="required">*</span></label>
-
           <input type="number" id="newBooksAdded" placeholder="e.g., 50" />
         </div>
 
         <div class="input-group half-width">
           <label>e-Resources Specific to Programme<span class="required">*</span></label>
-
           <input type="text" id="eResources" placeholder="e.g., IEEE Xplore, ScienceDirect subscription" />
         </div>
 
         <div class="input-group full-width">
           <label>Recommendation Document Link<span class="required">*</span></label>
-
           <input type="url" id="recommendationLink"
             placeholder="e.g., Link to the official recommendation list document" />
         </div>
+
       </div>
 
       <div class="form-footer">
+
         <button type="submit" class="submit-btn">
           <span>&#10003;</span> Submit Library Details
         </button>
+        <div class="popup" id="popup">
+          <img src="../images/check.jpg" alt="Check Mark">
+          <h2>Thank You!</h2>
+          <p>Your Form Successfully Submitted. Thanks!</p>
+          <button type="button" onclick="closePopup()">OK</button>
+        </div>
+
       </div>
+
     </form>
+
   </div>
   <script>
+
+    let popup = document.getElementById("popup");
+    function openPopup() {
+      popup.classList.add("open-popup");
+    }
+    function closePopup() {
+      popup.classList.remove("open-popup");
+    }
+
     function qs(name) {
       return new URLSearchParams(window.location.search).get(name) || '';
     }
+
     document.querySelector('form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = e.target.querySelector('button');
+      const btn = e
+        .target
+        .querySelector('button');
+
       btn.disabled = true;
+
       btn.textContent = 'Submitting...';
+
       const payload = {
+
         booksRecommended: document.getElementById('booksRecommended').value,
+
         newBooksAdded: Number(document.getElementById('newBooksAdded').value || 0),
+
         eResources: document.getElementById('eResources').value,
+
         recommendationLink: document.getElementById('recommendationLink').value,
+
         programmeCode: qs('code'), programmeName: qs('name'),
+
         courseCode: qs('course')
+
       };
+
       const token = localStorage.getItem('token');
       try {
         const res = await fetch('/api/library/submit',
@@ -217,6 +291,7 @@
             headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
             body: JSON.stringify(payload)
           });
+
         let data;
         try {
           data = await res.json();
@@ -224,6 +299,7 @@
         catch (e) {
           data = { raw: await res.text() };
         }
+
         console.log('library submit', res.status, data);
         if (!res.ok) {
           if (res.status === 401)
@@ -233,7 +309,9 @@
           btn.textContent = 'Submit Library Details';
           return;
         }
-        alert('Submitted successfully');
+        // alert('Submitted successfully');
+        openPopup();
+
         const q = [];
         if (payload.programmeCode) q.push('code=' + encodeURIComponent(payload.programmeCode));
         if (payload.programmeName) q.push('name=' + encodeURIComponent(payload.programmeName));

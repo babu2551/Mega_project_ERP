@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// course subdocument schema (not an independent collection)
 const courseSchema = new mongoose.Schema(
     {
         courseName: {

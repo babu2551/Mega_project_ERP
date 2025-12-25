@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SECTION C - Value-Added Courses (VAC)</title>
+  <title>Submit VAC Form</title>
   <style>
     * {
       margin: 0;
@@ -177,21 +177,6 @@
       cursor: not-allowed;
     }
 
-    /* Success Section
-    .success-section {
-      display: none;
-      margin-top: 30px;
-      padding: 30px;
-      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-      border: 3px solid #28a745;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .success-section.show {
-      display: block;
-      animation: slideIn 0.5s ease-out;
-    } */
 
     @keyframes slideIn {
       from {
@@ -257,6 +242,67 @@
         flex-direction: column;
       }
     }
+
+    /* popup  section*/
+
+    /* .btn {
+            padding: 10px 60px;
+            background: #fff;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 500;
+            border-radius: 30px;
+        } */
+
+    .popup {
+      width: 400px;
+      background: #fff;
+      border-radius: 6px;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      text-align: center;
+      padding: 0 30px 30px;
+      color: #333;
+      visibility: hidden;
+      transition: transform 0.4s, top 0.4s;
+    }
+
+    .open-popup {
+      visibility: visible;
+      top: 50%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup img {
+      width: 100px;
+      margin-top: -50px;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .popup h2 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 30px 0 10px;
+    }
+
+    .popup button {
+      width: 100%;
+      margin-top: 50px;
+      padding: 10px 0;
+      background: #6fd649;
+      color: #fff;
+      border: 0;
+      outline: none;
+      border-radius: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
   </style>
 </head>
 
@@ -268,7 +314,6 @@
 
     <div class="form-container">
 
-      <!-- Course Form -->
       <div id="coursesContainer">
         <div class="course-section" data-course-id="1">
           <div class="course-title">Details</div>
@@ -285,6 +330,8 @@
               <div class="error-message" id="courseCodeError1">Course code is required</div>
             </div>
 
+<!-- Program Id Section Add -->
+ 
             <div class="form-group">
               <label for="duration1">Duration (Hours) *</label>
               <input type="number" id="duration1" min="1" placeholder="e.g., 30" required>
@@ -320,31 +367,36 @@
 
             <div class="form-group">
               <label for="coordinator1">Upload Brochure / Certificate (PDF, JPG, PNG, CSV)</label>
-              <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png, .csv" required />
+              <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png, .csv"
+                required />
               <div class="error-message" id="certificateUpload">Upload Documents Here</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- NEW BUTTON GROUP -->
       <div class="button-group">
-        <button id="submitVacBtn" class="submit-btn">📩 Send To Program-Coordinator </button>
-      </div>
+        <button id="submitVacBtn" class="submit-btn">📩 Send Data</button>
 
-      <!-- Success Section
-      <div id="successSection" class="success-section">
-        <div class="success-icon">🎉</div>
-        <h3>VAC Data Saved Successfully!</h3>
-        <p>Share this unique link with students for registration:</p>
-        <a id="studentFormLink" href="#" class="student-link" target="_blank">vac-form.html</a>
-        <br>
-        <button id="copyBtn" class="copy-btn">📋 Copy Registration Link</button>
+        <div class="popup" id="popup">
+          <img src="../images/check.jpg" alt="Check Mark">
+          <h2>Thank You!</h2>
+          <p>Your Form Successfully Submitted. Thanks!</p>
+          <button type="button" onclick="closePopup()">OK</button>
+        </div>
       </div>
-    </div>
-  </div> -->
 
       <script>
+
+        // popup section
+        let popup = document.getElementById("popup");
+        function openPopup() {
+          popup.classList.add("open-popup");
+        }
+        function closePopup() {
+          popup.classList.remove("open-popup");
+        }
+
         (function () {
           const submitBtn = document.getElementById("submitVacBtn");
 
@@ -368,7 +420,6 @@
               return;
             }
 
-            // we only send the filename (file uploads not implemented here)
             let brochureLink = "";
             if (brochureInput && brochureInput.files && brochureInput.files.length) {
               const f = brochureInput.files[0];
@@ -426,6 +477,7 @@
               localStorage.setItem('vac:local', JSON.stringify(existing));
 
               alert('VAC entry saved locally and will appear on your dashboard.');
+              openPopup();
               window.location.href = 'pcdashboard.html';
             } catch (err) {
               console.error(err);

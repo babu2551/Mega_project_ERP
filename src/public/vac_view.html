@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VAC Student Submissions</title>
+  <title>VAC Dashboard</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -95,12 +95,17 @@
 
     <div style="text-align: center; margin-bottom: 20px;">
       <button class="btn" onclick="downloadCSV()">📥 Download CSV</button>
-      <button class="btn" onclick="clearData()" style="background: #dc3545;">🗑️ Clear All Data</button>
+      <button class="btn" onclick="clearDashboard()" style="background: #dc3545;">🗑️ Clear Dashboard</button>
+      <!-- <button class="btn" onclick="restoreDashboard()" style="background: #6c757d;">🔄 Restore</button>
+      <button class="btn" onclick="loadData()">🔁 Refresh</button> -->
     </div>
 
     <table id="dataTable">
+
       <thead>
+
         <tr>
+
           <th>Student Name</th>
           <th>Enrollment No.</th>
           <th>Phone</th>
@@ -109,33 +114,30 @@
           <th>Course</th>
           <th>Certificate</th>
           <th>Submitted At</th>
+
         </tr>
+
       </thead>
+
       <tbody id="tableBody"></tbody>
+
     </table>
+
   </div>
 
   <script>
-    // Load and display data (server-backed)
-    async function loadData() {
+    let lastLoadedData = null;
+
+    function renderData(submissions) {
       const tbody = document.getElementById('tableBody');
-      try {
-        const headers = {};
-        const token = localStorage.getItem('token');
-        if (token) headers['Authorization'] = 'Bearer ' + token;
-        const res = await fetch('/api/vac/submissions', { headers });
-        if (!res.ok) throw new Error('Failed to fetch');
-        const submissions = await res.json();
-
-        if (!submissions || submissions.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="8" class="no-data">📭 No submissions yet. Fill the form first!</td></tr>';
-          return;
-        }
-
-        tbody.innerHTML = '';
-        submissions.forEach((data, index) => {
-          const row = tbody.insertRow();
-          row.innerHTML = `
+      if (!submissions || submissions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="no-data">📭 No submissions yet. Fill the form first!</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '';
+      submissions.forEach((data) => {
+        const row = tbody.insertRow();
+        row.innerHTML = `
           <td>${data.studentName || 'N/A'}</td>
           <td>${data.enrollmentNumber || 'N/A'}</td>
           <td>${data.phoneNumber || 'N/A'}</td>
@@ -145,14 +147,26 @@
           <td>${data.certificateFilename || 'N/A'}</td>
           <td>${data.timestamp || data.createdAt || 'N/A'}</td>
         `;
-        });
+      });
+    }
+
+    async function loadData() {
+      try {
+        const headers = {};
+        const token = localStorage.getItem('token');
+        if (token) headers['Authorization'] = 'Bearer ' + token;
+        const res = await fetch('/api/vac/submissions', { headers });
+        if (!res.ok) throw new Error('Failed to fetch');
+        const submissions = await res.json();
+        lastLoadedData = submissions;
+        renderData(submissions);
       } catch (err) {
         console.error('Failed to load submissions', err);
+        const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '<tr><td colspan="8" class="no-data">⚠️ Failed to load submissions — try refreshing the page.</td></tr>';
       }
     }
 
-    // Download CSV using server endpoint
     async function downloadCSV() {
       const headers = {};
       const token = localStorage.getItem('token');
@@ -173,26 +187,24 @@
       }
     }
 
-    // Clear all submissions (server-backed): delete all submissions by fetching list and deleting each
-    async function clearData() {
-      if (!confirm('Are you sure? This will delete all submissions.')) return;
-      try {
-        const headers = {};
-        const token = localStorage.getItem('token');
-        if (token) headers['Authorization'] = 'Bearer ' + token;
-        const res = await fetch('/api/vac/submissions', { headers });
-        if (!res.ok) throw new Error('Failed to fetch submissions');
-        const subs = await res.json();
-        await Promise.all(subs.map(s => fetch('/api/vac/submissions/' + encodeURIComponent(s.id),
-          { method: 'DELETE', headers })));
+
+    function clearDashboard() {
+      if (!confirm('Clear Data !')) return;
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '<tr><td colspan="8" class="no-data">🧹 Dashboard cleared locally. Click "Restore" to bring the last loaded data back </td></tr>';
+      window.dashboardCleared = true;
+    }
+
+    function restoreDashboard() {
+      if (lastLoadedData && lastLoadedData.length) {
+        renderData(lastLoadedData);
+        window.dashboardCleared = false;
+      } else {
         loadData();
-      } catch (e) {
-        console.error('clearData failed', e);
-        alert('Failed to clear submissions');
       }
     }
 
-    // Load data on page load
+
     window.onload = loadData;
   </script>
 </body>
