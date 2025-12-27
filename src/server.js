@@ -100,7 +100,6 @@ app.get("/api/db/status", async (req, res) => {
   }
 });
 
-// NOTE: authentication handled in ./routes/auth.js (mounted at /api/auth). Removed duplicate handler that referenced undefined 'credentials'.
 
 app.listen(process.env.PORT, () => {
   console.log(`Server running at http://localhost:${process.env.PORT}`);

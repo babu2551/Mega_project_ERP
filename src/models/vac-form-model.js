@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const studentSchema = new mongoose.Schema({
     vacId: {
         type: String,
-        required: false
+        required: false,
+        unique: true
     },
     studentName: {
         type: String,
@@ -18,7 +19,7 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true,
         match: /^\d{10}$/
-    }, // 10 digit phone number validation
+    },
     courseCompleted: {
         type: String,
         required: true,

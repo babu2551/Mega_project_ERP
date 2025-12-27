@@ -8,7 +8,8 @@ const courseSchema = new mongoose.Schema(
         },
         courseCode: {
             type: String,
-            required: true
+            required: true,
+            
         },
         duration: {
             type: Number,

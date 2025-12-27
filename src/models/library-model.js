@@ -16,7 +16,8 @@ const librarySchema = new mongoose.Schema(
     },
     programmeCode: {
       type: String,
-      default: ''
+      default: '',
+      unique: true
     },
     programmeName: {
       type: String,

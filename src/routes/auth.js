@@ -7,7 +7,6 @@ const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 const saltRounds = 10;
 
-// Registration route - hash password before saving
 router.post("/register", async (req, res) => {
     try {
         const { username, password, role } = req.body;
@@ -17,7 +16,7 @@ router.post("/register", async (req, res) => {
                 .status(400)
                 .json({ error: 'username, password and role are required' });
 
-        // prevent duplicate username+role
+
         const existing = await User
             .findOne({ username, role })
             .exec();
@@ -52,15 +51,14 @@ router.post("/login", async (req, res) => {
                 .json({ error: 'username, password and role are required' });
 
         const user = await User.findOne({ username, role }).exec();
-        
+
         if (!user) {
             return res
                 .status(404)
                 .json({ error: "User not found" });
         }
 
-        // If user.password doesn't look like a bcrypt hash (no $2a$ / $2b$) we may have an older plaintext record.
-        // Support backward-compatible login: if plaintext equals provided password, hash it and save so future logins use bcrypt.
+
         const pw = user.password || '';
         let isMatch = false;
 
@@ -84,7 +82,13 @@ router.post("/login", async (req, res) => {
                 .status(401)
                 .json({ error: "Wrong password" });
 
-        const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt
+            .sign(
+                {
+                    id: user._id,
+                    role: user.role
+                },
+                JWT_SECRET, { expiresIn: "1h" });
 
         res.json({
             message: "Login successful",
@@ -92,7 +96,8 @@ router.post("/login", async (req, res) => {
             role: user.role,
             user: user.username,
         });
-    } catch (err) {
+    }
+    catch (err) {
         console.error(err);
         res
             .status(500)
@@ -113,7 +118,8 @@ export const authMiddleware = (req, res, next) => {
         const decoded = jwt.verify(token, JWT_SECRET);
         req.user = decoded;
         next();
-    } catch (err) {
+    }
+    catch (err) {
         res
             .status(401)
             .json({ error: "Token is not valid" });
