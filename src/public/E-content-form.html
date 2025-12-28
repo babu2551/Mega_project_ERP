@@ -229,6 +229,11 @@
           <input type="url" placeholder="e.g., https://youtube.com/..." />
         </div>
 
+        <div class="input-group full-width">
+          <label>Program ID (optional)</label>
+          <input type="text" id="programId" placeholder="Program ID or UUID" />
+        </div>
+
       </div>
 
       <div class="form-footer">
@@ -273,6 +278,7 @@
             platform: inputs[2]?.value?.trim() || "",
             dateOfLaunch: inputs[3]?.value || "",
             link: inputs[4]?.value?.trim() || "",
+            program_Id: inputs[5]?.value?.trim() || "",
           };
 
           const token = localStorage.getItem("token");

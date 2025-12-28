@@ -70,6 +70,7 @@ router.post("/submit", authMiddleware, async (req, res) => {
       // Trim all fields
       academicYear: formData.academicYear.trim(),
       programmeCode: formData.programmeCode.trim().toUpperCase(),
+      program_Id: (formData.program_Id || formData.programId || "").toString(),
       semester: formData.semester.trim(),
       yearOfIntroduction: formData.yearOfIntroduction.trim(),
       schoolName: formData.schoolName.trim(),

@@ -51,6 +51,14 @@ const vacEntrySchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    programmeCode: {
+        type: String,
+        default: ""
+    },
+    program_Id: {
+        type: String,
+        default: ""
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

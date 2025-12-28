@@ -12,6 +12,11 @@ const programmeCoordinatorSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        program_Id: {
+            type: String,
+            default: "",
+            trim: true,
+        },
         semester: {
             type: String,
             required: true,

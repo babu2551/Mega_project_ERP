@@ -26,7 +26,10 @@ async function readEntries() {
   const docs = await VacEntry.find({}).lean().exec();
   return docs.map((d) => ({
     id: d._id.toString(),
-    createdAt: d.createdAt ? new Date(d.createdAt).toISOString() : new Date().toISOString(), ...d,
+    createdAt: d.createdAt ? new Date(d.createdAt).toISOString() : new Date().toISOString(),
+    programmeCode: d.programmeCode || "",
+    program_Id: d.program_Id || "",
+    ...d,
   }));
 }
 
@@ -56,6 +59,7 @@ router.post("/submissions", async (req, res) => {
 
     const doc = new Student({
       vacId: payload.vacId || "",
+      program_Id: payload.program_Id || payload.programId || "",
       studentName: payload.studentName || "",
       enrollmentNumber: payload.enrollmentNumber || payload.enrollmentNo || "",
       phoneNumber: payload.phoneNumber || payload.phone || "",
@@ -178,6 +182,8 @@ router.post("/entries", authMiddleware, async (req, res) => {
       courses: Array.isArray(payload.courses) ? payload.courses : [],
       createdBy: req.user?.id,
       uploadedFile: req.file ? req.file.filename : null,
+      programmeCode: payload.programmeCode ? String(payload.programmeCode).trim().toUpperCase() : (payload.programme_code || ""),
+      program_Id: payload.program_Id || payload.programId || "",
     });
 
     const saved = await doc.save();

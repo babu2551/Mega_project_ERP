@@ -19,6 +19,10 @@ const librarySchema = new mongoose.Schema(
       default: '',
       unique: true
     },
+    program_Id: {
+      type: String,
+      default: ''
+    },
     programmeName: {
       type: String,
       default: ''

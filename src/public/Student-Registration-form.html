@@ -202,6 +202,8 @@
       <label><input type="radio" name="courseCompleted" value="No" /> No</label>
     </div>
 
+    <label for="programId">Program ID (optional)</label>
+    <input type="text" id="programId" name="programId" placeholder="Program ID or UUID" />
 
     <label for="certificateUpload">Upload Certificate (PDF, JPG, PNG, CSV) *</label>
     <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png, .csv" required />
@@ -237,6 +239,7 @@
 
             const payload = {
               vacId,
+              program_Id: fd.get('programId') || params.get('program_Id') || params.get('programId') || '',
               studentName: fd.get('studentName') || '',
               enrollmentNumber: fd.get('enrollmentNumber') || '',
               phoneNumber: fd.get('phoneNumber') || '',
@@ -265,7 +268,7 @@
               }
               openPopup();
               form.reset();
-            } 
+            }
             catch (err) {
               console.error(err);
               alert('Submission failed — please try again.');

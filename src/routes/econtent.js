@@ -13,6 +13,7 @@ router.post("/submit", authMiddleware, async (req, res) => {
       platform: p.platform || "",
       dateOfLaunch: p.dateOfLaunch || "",
       link: p.link || "",
+      program_Id: p.program_Id || p.programId || p.programmeCode || "",
       uploadedFile: req.file ? req.file.filename : null,
       createdBy: req.user?.id,
     });

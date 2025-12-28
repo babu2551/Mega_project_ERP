@@ -6,6 +6,10 @@ const studentSchema = new mongoose.Schema({
         required: false,
         unique: true
     },
+    program_Id: {
+        type: String,
+        default: ""
+    },
     studentName: {
         type: String,
         required: true

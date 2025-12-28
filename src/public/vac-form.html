@@ -330,8 +330,11 @@
               <div class="error-message" id="courseCodeError1">Course code is required</div>
             </div>
 
-<!-- Program Id Section Add -->
- 
+            <div class="form-group">
+              <label for="programId1">Program ID (optional)</label>
+              <input type="text" id="programId1" placeholder="Program ID or UUID" />
+            </div>
+
             <div class="form-group">
               <label for="duration1">Duration (Hours) *</label>
               <input type="number" id="duration1" min="1" placeholder="e.g., 30" required>
@@ -435,6 +438,7 @@
             }
 
             const payload = {
+              program_Id: (document.getElementById('programId1') && document.getElementById('programId1').value) ? document.getElementById('programId1').value.trim() : "",
               courses: [
                 {
                   courseName,

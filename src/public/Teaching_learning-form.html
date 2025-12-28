@@ -217,6 +217,11 @@
           <input type="url" placeholder="Photos, sample work (e.g., Google Drive link)" />
         </div>
 
+        <div class="input-group full-width">
+          <label>Program ID (optional)</label>
+          <input type="text" id="programId" placeholder="Program ID or UUID" />
+        </div>
+
       </div>
 
       <div class="form-footer">
@@ -256,6 +261,7 @@
             pedagogy: inputs[0]?.value?.trim() || "",
             mapping: inputs[1]?.value?.trim() || "",
             evidenceLink: inputs[2]?.value?.trim() || "",
+            program_Id: inputs[3]?.value?.trim() || "",
           };
 
           const token = localStorage.getItem("token");

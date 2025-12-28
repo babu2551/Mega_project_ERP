@@ -224,6 +224,11 @@
             placeholder="e.g., Link to the official recommendation list document" />
         </div>
 
+        <div class="input-group full-width">
+          <label>Program ID (optional)</label>
+          <input type="text" id="programId" placeholder="Program ID or UUID" />
+        </div>
+
       </div>
 
       <div class="form-footer">
@@ -259,57 +264,60 @@
 
     document.querySelector('form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = e
-        .target
-        .querySelector('button');
+      const btn = e.target.querySelector('button');
 
       btn.disabled = true;
-
       btn.textContent = 'Submitting...';
 
       const payload = {
-
         booksRecommended: document.getElementById('booksRecommended').value,
-
         newBooksAdded: Number(document.getElementById('newBooksAdded').value || 0),
-
         eResources: document.getElementById('eResources').value,
-
         recommendationLink: document.getElementById('recommendationLink').value,
-
-        programmeCode: qs('code'), programmeName: qs('name'),
-
-        courseCode: qs('course')
-
+        programmeCode: qs('code'),
+        programmeName: qs('name'),
+        courseCode: qs('course'),
+        program_Id: document.getElementById('programId').value || qs('program_Id') || qs('programId')
       };
 
-      const token = localStorage.getItem('token');
+      const token = (() => {
+        try { return localStorage.getItem('token'); } catch (e) { return null; }
+      })();
+
+      if (!token) {
+        alert('Please login first');
+        btn.disabled = false;
+        btn.textContent = 'Submit Library Details';
+        return;
+      }
+
       try {
-        const res = await fetch('/api/library/submit',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-            body: JSON.stringify(payload)
-          });
+        const res = await fetch('/api/library/submit', {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
 
         let data;
         try {
           data = await res.json();
-        }
-        catch (e) {
+        } catch (e) {
           data = { raw: await res.text() };
         }
 
         console.log('library submit', res.status, data);
+
         if (!res.ok) {
-          if (res.status === 401)
-            alert('Not authenticated — please login');
+          if (res.status === 401) alert('Not authenticated — please login');
           else alert(data.error || data.message || 'Failed to submit');
           btn.disabled = false;
           btn.textContent = 'Submit Library Details';
           return;
         }
-        // alert('Submitted successfully');
+
         openPopup();
 
         const q = [];

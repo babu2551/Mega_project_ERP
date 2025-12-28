@@ -22,6 +22,10 @@ const experientialSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
+    program_Id: {
+      type: String,
+      default: ''
+    },
     programmeName: {
       type: String,
       default: ''

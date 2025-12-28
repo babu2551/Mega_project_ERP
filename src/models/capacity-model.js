@@ -26,6 +26,10 @@ const capacitySchema = new mongoose.Schema(
       type: String,
       default: ""
     },
+    program_Id: {
+      type: String,
+      default: ""
+    },
     uploadedFile: {
       type: String,
       default: null

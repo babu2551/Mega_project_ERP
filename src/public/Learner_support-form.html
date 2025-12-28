@@ -227,6 +227,11 @@
           <label>Evidence Link<span class="required">*</span></label>
           <input type="url" placeholder="From mentors (e.g., Shared Drive link to mentor reports)" />
         </div>
+
+        <div class="input-group full-width">
+          <label>Program ID (optional)</label>
+          <input type="text" id="programId" placeholder="Program ID or UUID" />
+        </div>
       </div>
 
       <div class="form-footer">
@@ -286,6 +291,7 @@
         programmeCode: qs("code"),
         programmeName: qs("name"),
         courseCode: qs("course"),
+        program_Id: document.getElementById("programId").value || qs("program_Id") || qs("programId"),
       };
 
       const token = localStorage.getItem("token");

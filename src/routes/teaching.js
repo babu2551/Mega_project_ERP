@@ -11,6 +11,7 @@ router.post("/submit", authMiddleware, async (req, res) => {
       pedagogy: p.pedagogy || "",
       mapping: p.mapping || p.mappingText || "",
       evidenceLink: p.evidenceLink || "",
+      program_Id: p.program_Id || p.programId || p.programmeCode || "",
       uploadedFile: req.file ? req.file.filename : null,
       createdBy: req.user?.id,
     });
