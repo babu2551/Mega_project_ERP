@@ -268,9 +268,10 @@
       return new URLSearchParams(window.location.search).get(name) || "";
     }
 
-    document.querySelector("form").addEventListener("submit", async (e) => {
+    const form = document.querySelector("form");
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const btn = e.target.querySelector("button");
+      const btn = form.querySelector("button");
       btn.disabled = true;
       btn.textContent = "Submitting...";
       const payload = {
@@ -312,6 +313,7 @@
           return;
         }
         openPopup();
+        form.reset();
         // alert("Submitted successfully");
 
         const q = [];
@@ -319,8 +321,8 @@
           q.push("code=" + encodeURIComponent(payload.programmeCode));
         if (payload.programmeName)
           q.push("name=" + encodeURIComponent(payload.programmeName));
-        window.location.href =
-          "pcdashboard.html" + (q.length ? "?" + q.join("&") : "");
+        // window.location.href = "pcdashboard.html" +
+        (q.length ? "?" + q.join("&") : "");
       } catch (err) {
         console.error(err);
         alert("Server error while submitting");

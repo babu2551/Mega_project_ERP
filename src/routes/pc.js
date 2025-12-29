@@ -101,9 +101,13 @@ router.post("/submit", authMiddleware, async (req, res) => {
 // GET /api/pc/entries - User's own PC entries + linked courses count
 router.get("/entries", authMiddleware, async (req, res) => {
   try {
+    // Allow optional filtering by programId (program_Id field)
+    const match = { createdBy: mongoose.Types.ObjectId(req.user.id) };
+    if (req.query.programId) match.program_Id = req.query.programId;
+
     // Lookup VacEntry documents created by this user with same programmeCode
     const entries = await PcDetailsModel.aggregate([
-      { $match: { createdBy: mongoose.Types.ObjectId(req.user.id) } },
+      { $match: match },
       {
         $lookup: {
           from: "vacentries",

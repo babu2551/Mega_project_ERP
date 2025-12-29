@@ -357,9 +357,12 @@
           // redirect to PC dashboard with filters for the submitted programme
           const programmeCode = payload.programmeCode || "";
           const programmeName = payload.programmeName || "";
-          window.location.href = `pcdashboard.html?code=${encodeURIComponent(
-            programmeCode
-          )}&name=${encodeURIComponent(programmeName)}`;
+          const programId = payload.program_Id || "";
+          const q = [];
+          if (programmeCode) q.push("code=" + encodeURIComponent(programmeCode));
+          if (programmeName) q.push("name=" + encodeURIComponent(programmeName));
+          if (programId) q.push("programId=" + encodeURIComponent(programId));
+          window.location.href = `PC-Dashboard.html${q.length ? "?" + q.join("&") : ""}`;
         } catch (err) {
           console.error("PC submit failed", err);
           alert("Server error while submitting.");

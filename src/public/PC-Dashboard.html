@@ -358,6 +358,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     const selectedCode = urlParams.get("code") || "";
     const selectedName = urlParams.get("name") || "";
+    const selectedProgramId = urlParams.get("programId") || urlParams.get("program_Id") || "";
 
     function createElementFromHTML(html) {
       const div = document.createElement("div");
@@ -426,9 +427,12 @@
 
       let entries = [];
       try {
-        const res = await fetch("/api/pc/entries", {
-          headers: { Authorization: "Bearer " + token },
-        });
+        const res = await fetch(
+          "/api/pc/entries" + (selectedProgramId ? "?programId=" + encodeURIComponent(selectedProgramId) : ""),
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        );
         if (!res.ok) {
           const j = await res.json().catch(() => ({}));
           alert(j.error || "Failed to load PC entries");
@@ -451,7 +455,7 @@
       backdrop.className = "vac-modal-backdrop";
       const modal = document.createElement("div");
       modal.className = "vac-modal";
-      const titleSuffix = selectedCode ? ` (${selectedCode})` : "";
+      const titleSuffix = (selectedCode ? ` (${selectedCode})` : "") + (selectedProgramId ? ` [ID: ${selectedProgramId}]` : "");
       modal.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
             <h2>My Programme Submissions${titleSuffix}</h2>
             <div><button id="pcClose" style="background:#ddd;border:none;padding:8px 10px;border-radius:6px;cursor:pointer">Close</button></div>
@@ -524,9 +528,12 @@
       })();
       if (!token) return alert("Not authenticated");
       try {
-        const res = await fetch("/api/pc/entries", {
-          headers: { Authorization: "Bearer " + token },
-        });
+        const res = await fetch(
+          "/api/pc/entries" + (selectedProgramId ? "?programId=" + encodeURIComponent(selectedProgramId) : ""),
+          {
+            headers: { Authorization: "Bearer " + token },
+          }
+        );
         if (!res.ok) {
           const j = await res.json().catch(() => ({}));
           return alert(j.error || "Failed");
@@ -933,8 +940,9 @@
         "e-capacity": "/api/capacity/entries",
         teaching: "/api/teaching/entries",
       };
-      const endpoint = mapping[type];
-      if (!endpoint) return alert("Unknown type");
+      const baseEndpoint = mapping[type];
+      if (!baseEndpoint) return alert("Unknown type");
+      const endpoint = baseEndpoint + (selectedProgramId ? ("?programId=" + encodeURIComponent(selectedProgramId)) : "");
 
       let entries = [];
       try {
@@ -957,9 +965,10 @@
       backdrop.className = "vac-modal-backdrop";
       const modal = document.createElement("div");
       modal.className = "vac-modal";
+      const titleSuffix = selectedProgramId ? ` [ID: ${selectedProgramId}]` : "";
       modal.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;"><h2>${type
         .replace("-", " ")
-        .toUpperCase()}</h2><div><button id="otherClose" style="background:#ddd;border:none;padding:8px 10px;border-radius:6px;cursor:pointer">Close</button></div></div><div id="otherList" style="margin-top:12px"></div>`;
+        .toUpperCase()}${titleSuffix}</h2><div><button id="otherClose" style="background:#ddd;border:none;padding:8px 10px;border-radius:6px;cursor:pointer">Close</button></div></div><div id="otherList" style="margin-top:12px"></div>`;
       backdrop.appendChild(modal);
       document.body.appendChild(backdrop);
 
@@ -982,7 +991,7 @@
         view.style.cursor = "pointer";
         view.addEventListener("click", async () => {
           try {
-            const r = await fetch(endpoint + "/" + (e.id || e._id), {
+            const r = await fetch(baseEndpoint + "/" + (e.id || e._id), {
               headers: { Authorization: "Bearer " + token },
             });
             if (!r.ok) {

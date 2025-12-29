@@ -33,17 +33,11 @@ router.post("/submit", authMiddleware, async (req, res) => {
 
 router.get("/entries", authMiddleware, async (req, res) => {
   try {
-    if (req.user && req.user.role === "admin") {
-      const docs = await EContent.find({}).lean().exec();
-      return res.json(
-        docs.map((d) => ({
-          id: d._id.toString(),
-          createdAt: d.createdAt,
-          ...d,
-        }))
-      );
-    }
-    const docs = await EContent.find({ createdBy: req.user?.id }).lean().exec();
+    const q = {};
+    if (req.query.programId) q.program_Id = req.query.programId;
+    if (!(req.user && req.user.role === "admin")) q.createdBy = req.user?.id;
+
+    const docs = await EContent.find(q).lean().exec();
     return res.json(
       docs.map((d) => ({ id: d._id.toString(), createdAt: d.createdAt, ...d }))
     );

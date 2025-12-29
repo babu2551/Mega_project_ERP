@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import multer from "multer";
+import cookieParser from "cookie-parser";
 import connectDB from "./db/index.js";
 import authRoutes from "./routes/auth.js";
 import vacRoutes from "./routes/vac.js";
@@ -23,6 +24,7 @@ connectDB();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

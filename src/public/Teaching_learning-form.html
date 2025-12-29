@@ -250,45 +250,46 @@
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      document
-        .querySelector("form").addEventListener("submit", async function (e) {
-          e.preventDefault();
-          const inputs = Array.from(
-            document.querySelectorAll(".input-grid input")
-          );
+      const form = document.querySelector("form");
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const inputs = Array.from(
+          form.querySelectorAll(".input-grid input")
+        );
 
-          const payload = {
-            pedagogy: inputs[0]?.value?.trim() || "",
-            mapping: inputs[1]?.value?.trim() || "",
-            evidenceLink: inputs[2]?.value?.trim() || "",
-            program_Id: inputs[3]?.value?.trim() || "",
-          };
+        const payload = {
+          pedagogy: inputs[0]?.value?.trim() || "",
+          mapping: inputs[1]?.value?.trim() || "",
+          evidenceLink: inputs[2]?.value?.trim() || "",
+          program_Id: inputs[3]?.value?.trim() || "",
+        };
 
-          const token = localStorage.getItem("token");
-          if (!token) {
-            alert("Please login first");
-            return;
-          }
-          try {
-            const res = await fetch("/api/teaching/submit", {
-              method: "POST",
-              headers: {
-                Authorization: "Bearer " + token,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(payload),
-            });
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("Please login first");
+          return;
+        }
+        try {
+          const res = await fetch("/api/teaching/submit", {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
 
-            const j = await res.json().catch(() => ({}));
-            if (!res.ok) return alert(j.error || "Failed to submit");
-            openPopup();
-            // alert("Submitted successfully");
-            // window.location.href = "/pcdashboard.html";
-          } catch (err) {
-            console.error(err);
-            alert("Server error");
-          }
-        });
+          const j = await res.json().catch(() => ({}));
+          if (!res.ok) return alert(j.error || "Failed to submit");
+          openPopup();
+          form.reset();
+          // alert("Submitted successfully");
+          // window.location.href = "/pcdashboard.html";
+        } catch (err) {
+          console.error(err);
+          alert("Server error");
+        }
+      });
     });
   </script>
 </body>

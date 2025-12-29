@@ -31,27 +31,14 @@ router.post("/submit", authMiddleware, async (req, res) => {
 
 router.get("/entries", authMiddleware, async (req, res) => {
   try {
-    if (req.user && req.user.role === "admin") {
-      const docs = await Teaching.find({}).lean().exec();
-      return res.json(
-        docs.map((d) => ({
-          id: d._id.toString(),
-          createdAt: d.createdAt,
-          ...d,
-        }))
-      );
-    }
-    const docs = await Teaching
-      .find({ createdBy: req.user?.id })
-      .lean()
-      .exec();
-    return res
-      .json(
-        docs.map((d) => ({
-          id: d._id.toString(),
-          createdAt: d.createdAt, ...d
-        }))
-      );
+    const q = {};
+    if (req.query.programId) q.program_Id = req.query.programId;
+    if (!(req.user && req.user.role === "admin")) q.createdBy = req.user?.id;
+
+    const docs = await Teaching.find(q).lean().exec();
+    return res.json(
+      docs.map((d) => ({ id: d._id.toString(), createdAt: d.createdAt, ...d }))
+    );
   } catch (err) {
     console.error("Teaching entries error", err);
     res.status(500).json({ error: "Failed to fetch teaching entries" });
