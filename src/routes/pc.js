@@ -31,14 +31,18 @@ router.post("/submit", authMiddleware, async (req, res) => {
 
     for (const field of requiredFields) {
       if (!formData[field]?.trim()) {
-        return res.status(400).json({ error: `Missing: ${field}` });
+        return res
+          .status(400)
+          .json({ error: `Missing: ${field}` });
       }
     }
 
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.coordinatorEmail)) {
-      return res.status(400).json({ error: "Invalid email" });
+      return res
+        .status(400)
+        .json({ error: "Invalid email" });
     }
 
     // **KEY: Fetch coordinator's own course data only**
@@ -56,10 +60,12 @@ router.post("/submit", authMiddleware, async (req, res) => {
     );
 
     if (!hasMatchingCourses && userCourses.length > 0) {
-      return res.status(400).json({
-        error: "Programme code must match your submitted VAC courses",
-        availableProgrammes: userCourses.map((c) => c.programmeCode),
-      });
+      return res
+        .status(400)
+        .json({
+          error: "Programme code must match your submitted VAC courses",
+          availableProgrammes: userCourses.map((c) => c.programmeCode),
+        });
     }
 
     // Save PC entry with strict user isolation and file reference
@@ -83,18 +89,22 @@ router.post("/submit", authMiddleware, async (req, res) => {
 
     const savedEntry = await pcEntry.save();
 
-    res.status(201).json({
-      success: true,
-      message: "Programme details submitted with your course data!",
-      entryId: savedEntry._id,
-      programmeCode: savedEntry.programmeCode,
-      linkedCourses: userCourses.length,
-      uploadedFile: savedEntry.uploadedFile,
-      redirect: "/pcdashboard.html",
-    });
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Programme details submitted with your course data!",
+        entryId: savedEntry._id,
+        programmeCode: savedEntry.programmeCode,
+        linkedCourses: userCourses.length,
+        uploadedFile: savedEntry.uploadedFile,
+        redirect: "/pcdashboard.html",
+      });
   } catch (error) {
     console.error("PC Submit error:", error);
-    res.status(500).json({ error: "Server error" });
+    res
+      .status(500)
+      .json({ error: "Server error" });
   }
 });
 
@@ -145,7 +155,9 @@ router.get("/entries", authMiddleware, async (req, res) => {
     res.json(entries);
   } catch (error) {
     console.error("PC Entries error:", error);
-    res.status(500).json({ error: "Failed to fetch entries" });
+    res
+      .status(500)
+      .json({ error: "Failed to fetch entries" });
   }
 });
 
@@ -163,7 +175,9 @@ router.get("/my-courses", authMiddleware, async (req, res) => {
       programmeCodes: [...new Set(courses.map((c) => c.programmeCode))],
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch courses" });
+    res
+      .status(500)
+      .json({ error: "Failed to fetch courses" });
   }
 });
 

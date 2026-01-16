@@ -28,7 +28,9 @@ router.post("/submit", authMiddleware, async (req, res) => {
       });
   } catch (err) {
     console.error("Capacity submit error", err);
-    res.status(500).json({ error: "Failed to save capacity entry" });
+    res
+      .status(500)
+      .json({ error: "Failed to save capacity entry" });
   }
 });
 
@@ -38,13 +40,19 @@ router.get("/entries", authMiddleware, async (req, res) => {
     if (req.query.programId) q.program_Id = req.query.programId;
     if (!(req.user && req.user.role === "admin")) q.createdBy = req.user?.id;
 
-    const docs = await Capacity.find(q).lean().exec();
-    return res.json(
-      docs.map((d) => ({ id: d._id.toString(), createdAt: d.createdAt, ...d }))
-    );
+    const docs = await Capacity
+      .find(q)
+      .lean()
+      .exec();
+    return res
+      .json(
+        docs.map((d) => ({ id: d._id.toString(), createdAt: d.createdAt, ...d }))
+      );
   } catch (err) {
     console.error("Capacity entries error", err);
-    res.status(500).json({ error: "Failed to fetch capacity entries" });
+    res
+      .status(500)
+      .json({ error: "Failed to fetch capacity entries" });
   }
 });
 
@@ -52,20 +60,28 @@ router.get("/entries/:id", authMiddleware, async (req, res) => {
   try {
     const id = req.params.id;
     const doc = await Capacity.findById(id).lean().exec();
-    if (!doc) return res.status(404).json({ error: "Not found" });
+    if (!doc)
+      return res
+        .status(404)
+        .json({ error: "Not found" });
     if (
       req.user.role !== "admin" &&
       String(doc.createdBy || "") !== String(req.user.id)
     )
-      return res.status(403).json({ error: "Forbidden" });
-    return res.json({
-      id: doc._id.toString(),
-      createdAt: doc.createdAt,
-      ...doc,
-    });
+      return res
+        .status(403)
+        .json({ error: "Forbidden" });
+    return res
+      .json({
+        id: doc._id.toString(),
+        createdAt: doc.createdAt,
+        ...doc,
+      });
   } catch (err) {
     console.error("Capacity read error", err);
-    res.status(500).json({ error: "Failed to read capacity entry" });
+    res
+      .status(500)
+      .json({ error: "Failed to read capacity entry" });
   }
 });
 
