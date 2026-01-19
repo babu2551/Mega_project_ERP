@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professional Navbar</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f6f8;
+}
+
+.navbar {
+    height: 70px;
+    background-color: #153977;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    height: 60px;
+    width: auto;
+}
+
+.text h1 {
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    margin: 0;
+}
+
+.text p {
+    font-size: 12px;
+    color: #cfd8dc;
+    margin: 2px 0 0 0;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-container {
+    position: relative;
+}
+
+.profile-btn {
+    background-color: #1e5a96;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.profile-btn:hover {
+    background-color: #2874c4;
+    transform: scale(1.1);
+}
+
+.profile-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.profile-menu.active {
+    display: block;
+}
+
+.profile-menu-item {
+    padding: 12px 16px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.profile-menu-item:last-child {
+    border-bottom: none;
+}
+
+.profile-menu-item:hover {
+    background-color: #f5f5f5;
+    color: #153977;
+}
+
+.profile-menu-item i {
+    width: 20px;
+    text-align: center;
+}
+
+.logout-btn {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-btn:hover {
+    background-color: #8b0000;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.logout-btn i {
+    font-size: 16px;
+}
+
+/* Close menu when clicking outside */
+.navbar {
+    position: relative;
+}
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="left-section">
+        <img src="logo-removebg-preview (2)(1).png" alt="Institute Logo" class="logo">
+        <div class="text">
+            <h1>Prestige Institute of Research & Management</h1>
+            <p>Gwalior</p>
+        </div>
+    </div>
+
+    <div class="right-section">
+        <div class="profile-container">
+            <button class="profile-btn" id="profileBtn" title="Profile">
+                <i class="fas fa-user"></i>
+            </button>
+            <div class="profile-menu" id="profileMenu">
+                <a class="profile-menu-item" href="#" onclick="viewProfile(event)">
+                    <i class="fas fa-id-card"></i> View Profile
+                </a>
+                <a class="profile-menu-item" href="#" onclick="editProfile(event)">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </a>
+                <a class="profile-menu-item" href="#" onclick="changePassword(event)">
+                    <i class="fas fa-lock"></i> Change Password
+                </a>
+                <a class="profile-menu-item" href="#" onclick="viewSettings(event)">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </div>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</nav>
+
+<script>
+    // Toggle profile menu
+    document.getElementById('profileBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const menu = document.getElementById('profileMenu');
+        menu.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('profileMenu');
+        const profileBtn = document.getElementById('profileBtn');
+        if (!e.target.closest('.profile-container')) {
+            menu.classList.remove('active');
+        }
+    });
+
+    function viewProfile(e) {
+        e.preventDefault();
+        const userEmail = localStorage.getItem('userEmail');
+        alert('Profile: ' + (userEmail || 'User Profile'));
+        // You can replace this with a modal or redirect to profile page
+    }
+
+    function editProfile(e) {
+        e.preventDefault();
+        alert('Edit profile functionality - Redirect to edit profile page');
+        // window.location.href = 'edit-profile.html';
+    }
+
+    function changePassword(e) {
+        e.preventDefault();
+        alert('Change password functionality - Redirect to change password page');
+        // window.location.href = 'change-password.html';
+    }
+
+    function viewSettings(e) {
+        e.preventDefault();
+        alert('Settings functionality - Redirect to settings page');
+        // window.location.href = 'settings.html';
+    }
+
+    function logout() {
+        if (confirm("Do you really want to logout?")) {
+            sessionStorage.clear();
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    }
+</script>
+</body>
+</html>

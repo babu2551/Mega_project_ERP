@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Programme Coordinator Details Form</title>
 
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
     * {
@@ -23,30 +21,97 @@
       padding: 25px;
     }
 
-    /* Container */
+    /* ===== NAVBAR ===== */
+    .navbar {
+      height: 70px;
+      background-color: #153977;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      margin-bottom: 20px;
+    }
+
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      height: 60px;
+    }
+
+    .text h1 {
+      font-size: 18px;
+      color: white;
+    }
+
+    .text p {
+      font-size: 12px;
+      color: #cfd8dc;
+    }
+
+    .profile-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #1e5a96;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    .profile-menu {
+      position: absolute;
+      top: 55px;
+      right: 0;
+      background: white;
+      border-radius: 8px;
+      display: none;
+      min-width: 200px;
+    }
+
+    .profile-menu.active {
+      display: block;
+    }
+
+    .profile-menu-item {
+      padding: 12px;
+      display: block;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .profile-menu-item:hover {
+      background: #f5f5f5;
+    }
+
+    .logout-btn {
+      background: #c62828;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+
+    /* ===== FORM ===== */
     .container {
-      width: 90%;
       max-width: 1100px;
       margin: auto;
-      background: #fff;
+      background: white;
       border-radius: 14px;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
       overflow: hidden;
     }
 
-    /* Header */
     .form-header {
       background: linear-gradient(90deg, #5b5ada, #9257d9);
       padding: 20px;
       text-align: center;
-    }
-
-    .form-header h2 {
       color: white;
-      font-weight: 600;
     }
 
-    /* Form Grid */
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -55,8 +120,8 @@
     }
 
     .form-group label {
-      font-size: 14px;
       font-weight: 600;
+      font-size: 14px;
     }
 
     .form-group span {
@@ -64,27 +129,16 @@
     }
 
     .form-group input {
-      margin-top: 5px;
       width: 100%;
-      padding: 13px;
-      border-radius: 10px;
-      border: 1.7px solid #ddd;
-      background: #f9f9f9;
-      font-size: 15px;
-      outline: none;
-      transition: 0.2s ease;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1.5px solid #ddd;
+      margin-top: 6px;
     }
 
-    .form-group input:focus {
-      border-color: #5b5ada;
-      background: #fff;
-    }
-
-    /* Buttons */
     .btn-row {
-      display: flex;
-      justify-content: center;
-      padding: 20px 25px;
+      padding: 20px;
+      text-align: center;
     }
 
     .submit-btn {
@@ -92,62 +146,21 @@
       color: white;
       border: none;
       padding: 15px 25px;
-      border-radius: 10px;
-      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
-      width: 48%;
-      transition: 0.3s ease;
-    }
-
-    .submit-btn:hover {
-      background: #067c36;
-    }
-
-    .view-btn {
-      background: #ff7b00;
-      color: white;
-      border: none;
-      padding: 15px 25px;
-      border-radius: 10px;
       font-size: 16px;
-      cursor: pointer;
-      width: 48%;
-      transition: 0.3s ease;
-    }
-
-    .view-btn:hover {
-      background: #d86400;
+      width: 50%;
     }
 
     .error {
-      animation: fadeIn 0.3s ease;
+      border: 2px solid red !important;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-3px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Responsive */
     @media (max-width: 768px) {
       .form-grid {
         grid-template-columns: 1fr;
       }
-
-      .btn-row {
-        flex-direction: column;
-        gap: 10px;
-      }
-
-      .submit-btn,
-      .view-btn {
+      .submit-btn {
         width: 100%;
       }
     }
@@ -155,234 +168,163 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="form-header">
-      <h2>Programme Coordinator Details Form</h2>
-    </div>
 
-    <form class="form-grid">
-      <!-- Academic Year -->
-      <div class="form-group">
-        <label>Academic Year <span>*</span></label>
-        <input type="text" placeholder="e.g., 2023-24" />
-      </div>
-
-      <!-- Programme Code -->
-      <div class="form-group">
-        <label>Programme Code <span>*</span></label>
-        <input type="text" placeholder="As per institute" />
-      </div>
-
-      <!-- Semester -->
-      <div class="form-group">
-        <label>Semester <span>*</span></label>
-        <input type="text" placeholder="Jan–June / Jul–Dec" />
-      </div>
-
-      <!-- Year of Introduction -->
-      <div class="form-group">
-        <label>Year of Introduction <span>*</span></label>
-        <input type="text" placeholder="e.g., 2020" />
-      </div>
-
-      <!-- School Name -->
-      <div class="form-group">
-        <label>School/Faculty Name <span>*</span></label>
-        <input type="text" placeholder="e.g., School of Engineering" />
-      </div>
-
-      <!-- Coordinator Name -->
-      <div class="form-group">
-        <label>Coordinator Name <span>*</span></label>
-        <input type="text" placeholder="e.g., Dr. John Doe" />
-      </div>
-
-      <!-- Department Name -->
-      <div class="form-group">
-        <label>Department Name <span>*</span></label>
-        <input type="text" placeholder="e.g., Computer Science" />
-      </div>
-
-      <!-- Coordinator Email -->
-      <div class="form-group">
-        <label>Coordinator Email <span>*</span></label>
-        <input type="email" placeholder="e.g., john.doe@university.edu" />
-      </div>
-
-      <!-- Programme Name -->
-      <div class="form-group">
-        <label>Programme Name <span>*</span></label>
-        <input type="text" placeholder="e.g., B.Tech CSE" />
-      </div>
-
-      <!-- Program ID -->
-      <div class="form-group">
-        <label>Program ID (optional)</label>
-        <input type="text" id="programId" placeholder="Program ID or UUID" />
-      </div>
-
-      <!-- Coordinator Contact -->
-      <div class="form-group">
-        <label>Coordinator Contact <span>*</span></label>
-        <input type="text" placeholder="e.g., +91-9876543210" />
-      </div>
-
-      <!-- Upload Brochure/Document
-        <div class="form-group">
-          <label>Upload Brochure/Document</label>
-          <input
-            type="file"
-            id="brochureUpload"
-            accept=".pdf,.jpg,.jpeg,.png,.csv"
-          />
-        </div> -->
-    </form>
-
-    <!-- Buttons Section -->
-    <div class="btn-row">
-      <button class="submit-btn">
-        <i class="fa-solid fa-check"></i> Submit Programme Details
-      </button>
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar">
+  <div class="left-section">
+    <img src="logo.png" class="logo" />
+    <div class="text">
+      <h1>Prestige Institute of Research & Management</h1>
+      <p>Gwalior</p>
     </div>
   </div>
 
-  <script>
-    // Load coordinator's available programme codes on page load
-    async function loadMyCourses() {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch("/api/pc/my-courses", {
-          headers: { Authorization: "Bearer " + token },
-        });
-        if (res.ok) {
-          const data = await res.json();
-          console.log("Available programme codes:", data.programmeCodes);
-          // Could populate programmeCode dropdown/input with suggestions
-        }
-      } catch (e) {
-        console.error("Courses load failed:", e);
-      }
+  <div style="position:relative;">
+    <button class="profile-btn" id="profileBtn">
+      <i class="fa fa-user"></i>
+    </button>
+    <div class="profile-menu" id="profileMenu">
+      <a class="profile-menu-item" href="#">View Profile</a>
+      <a class="profile-menu-item" href="#">Change Password</a>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<!-- ===== FORM ===== -->
+<div class="container">
+  <div class="form-header">
+    <h2>Programme Coordinator Details Form</h2>
+  </div>
+
+  <form id="pcForm" class="form-grid">
+
+    <div class="form-group">
+      <label>Academic Year <span>*</span></label>
+      <input name="academicYear" />
+    </div>
+
+    <div class="form-group">
+      <label>Programme Code <span>*</span></label>
+      <input name="programmeCode" />
+    </div>
+
+    <div class="form-group">
+      <label>Semester <span>*</span></label>
+      <input name="semester" />
+    </div>
+
+    <div class="form-group">
+      <label>Year of Introduction <span>*</span></label>
+      <input name="yearOfIntroduction" />
+    </div>
+
+    <div class="form-group">
+      <label>School Name <span>*</span></label>
+      <input name="schoolName" />
+    </div>
+
+    <div class="form-group">
+      <label>Coordinator Name <span>*</span></label>
+      <input name="coordinatorName" />
+    </div>
+
+    <div class="form-group">
+      <label>Department Name <span>*</span></label>
+      <input name="departmentName" />
+    </div>
+
+    <div class="form-group">
+      <label>Coordinator Email <span>*</span></label>
+      <input type="email" name="coordinatorEmail" />
+    </div>
+
+    <div class="form-group">
+      <label>Programme Name <span>*</span></label>
+      <input name="programmeName" />
+    </div>
+
+    <div class="form-group">
+      <label>Program ID (optional)</label>
+      <input name="program_Id" />
+    </div>
+
+    <div class="form-group">
+      <label>Coordinator Contact <span>*</span></label>
+      <input name="coordinatorContact" />
+    </div>
+
+  </form>
+
+  <div class="btn-row">
+    <button class="submit-btn" id="submitBtn">
+      Submit Programme Details
+    </button>
+  </div>
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const profileBtn = document.getElementById("profileBtn");
+  const profileMenu = document.getElementById("profileMenu");
+
+  profileBtn.onclick = () => profileMenu.classList.toggle("active");
+
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".profile-btn")) {
+      profileMenu.classList.remove("active");
     }
+  });
 
-    // Call on page load
-    loadMyCourses();
+  document.getElementById("submitBtn").onclick = async e => {
+    e.preventDefault();
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const submitBtn = document.querySelector(".submit-btn");
-      const form = document.querySelector(".form-grid");
+    const form = document.getElementById("pcForm");
+    const inputs = form.querySelectorAll("input");
+    let valid = true;
+    const payload = {};
 
-      submitBtn.addEventListener("click", async function (e) {
-        e.preventDefault();
-
-        let inputs = form.querySelectorAll("input");
-        let allFilled = true;
-        const payload = {};
-        const keys = [
-          "academicYear",
-          "programmeCode",
-          "semester",
-          "yearOfIntroduction",
-          "schoolName",
-          "coordinatorName",
-          "departmentName",
-          "coordinatorEmail",
-          "programmeName",
-          "program_Id",
-          "coordinatorContact",
-        ];
-
-        inputs.forEach((input, idx) => {
-          input.classList.remove("error");
-          const v = input.value.trim();
-          // allow program_Id to be optional
-          if (v === "" && keys[idx] !== "program_Id") {
-            allFilled = false;
-            input.classList.add("error");
-            input.style.border = "2px solid red";
-            input.style.animation = "shake 0.2s ease";
-            setTimeout(() => (input.style.animation = ""), 200);
-          } else {
-            input.style.border = "1.7px solid #ddd";
-          }
-          payload[keys[idx]] = v;
-        });
-
-        if (!allFilled) {
-          alert("⚠ Please fill all required fields!");
-          return;
-        }
-
-        const token = (() => {
-          try {
-            return localStorage.getItem("token");
-          } catch (e) {
-            return null;
-          }
-        })();
-        if (!token) {
-          alert("You must be logged in as PC coordinator to submit.");
-          return;
-        }
-
-        try {
-          // Create FormData to support file uploads
-          const formData = new FormData();
-
-          // Add form fields
-          keys.forEach((key, idx) => {
-            formData.append(key, payload[key]);
-          });
-
-          // Add file if selected
-          const fileInput = document.getElementById("brochureUpload");
-          if (fileInput && fileInput.files.length > 0) {
-            formData.append("brochureFile", fileInput.files[0]);
-          }
-
-          const res = await fetch("/api/pc/submit", {
-            method: "POST",
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-            body: formData,
-          });
-
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) {
-            alert(data.error || "Failed to submit programme details");
-            return;
-          }
-
-          alert(data.message || "Programme details submitted successfully");
-          // redirect to PC dashboard with filters for the submitted programme
-          const programmeCode = payload.programmeCode || "";
-          const programmeName = payload.programmeName || "";
-          const programId = payload.program_Id || "";
-          const q = [];
-          if (programmeCode) q.push("code=" + encodeURIComponent(programmeCode));
-          if (programmeName) q.push("name=" + encodeURIComponent(programmeName));
-          if (programId) q.push("programId=" + encodeURIComponent(programId));
-          window.location.href = `PC-Dashboard.html${q.length ? "?" + q.join("&") : ""}`;
-        } catch (err) {
-          console.error("PC submit failed", err);
-          alert("Server error while submitting.");
-        }
-      });
+    inputs.forEach(input => {
+      input.classList.remove("error");
+      if (!input.value && input.name !== "program_Id") {
+        valid = false;
+        input.classList.add("error");
+      }
+      payload[input.name] = input.value.trim();
     });
 
-    // Shake animation
-    const style = document.createElement("style");
-    style.innerHTML = `
-@keyframes shake {
-  0% { transform: translateX(0px); }
-  25% { transform: translateX(-3px); }
-  50% { transform: translateX(3px); }
-  75% { transform: translateX(-3px); }
-  100% { transform: translateX(0px); }
-}
-`;
-    document.head.appendChild(style);
-  </script>
-</body>
+    if (!valid) {
+      alert("Please fill all required fields");
+      return;
+    }
 
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Login required");
+      return;
+    }
+
+    const res = await fetch("/api/pc/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    alert(data.message || "Submitted successfully");
+  };
+});
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
 </html>
