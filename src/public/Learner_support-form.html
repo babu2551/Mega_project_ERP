@@ -1,359 +1,359 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learners’ Support: Advanced & Slow Learners</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Learners’ Support: Advanced & Slow Learners</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background-color: #f0f4f8;
-      min-height: 100vh;
-    }
-
-    /* ================= NAVBAR ================= */
-    .navbar {
-      height: 70px;
-      background-color: #153977;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 40px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-    }
-
-    .left-section {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .logo {
-      height: 60px;
-    }
-
-    .text h1 {
-      font-size: 18px;
-      color: #fff;
-    }
-
-    .text p {
-      font-size: 12px;
-      color: #cfd8dc;
-    }
-
-    .right-section {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .profile-container {
-      position: relative;
-    }
-
-    .profile-btn {
-      background: #1e5a96;
-      border: none;
-      color: #fff;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .profile-menu {
-      position: absolute;
-      top: 55px;
-      right: 0;
-      background: #fff;
-      border-radius: 8px;
-      min-width: 200px;
-      display: none;
-      z-index: 1000;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
-    }
-
-    .profile-menu.active {
-      display: block;
-    }
-
-    .profile-menu-item {
-      padding: 12px 16px;
-      display: flex;
-      gap: 10px;
-      cursor: pointer;
-      text-decoration: none;
-      color: #333;
-    }
-
-    .profile-menu-item:hover {
-      background: #f5f5f5;
-    }
-
-    .logout-btn {
-      background: #c62828;
-      border: none;
-      color: #fff;
-      padding: 10px 18px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    /* ================= FORM ================= */
-    .form-container {
-      max-width: 900px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, .1);
-      overflow: hidden;
-    }
-
-    .form-header {
-      background: linear-gradient(90deg, #5b86e5, #904e95);
-      padding: 25px;
-      color: #fff;
-      text-align: center;
-    }
-
-    .form-body {
-      padding: 30px;
-    }
-
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .input-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .input-group label {
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .required {
-      color: red;
-    }
-
-    .input-group input {
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .full-width {
-      grid-column: span 2;
-    }
-
-    .submit-btn {
-      margin-top: 20px;
-      width: 100%;
-      padding: 15px;
-      border: none;
-      background: linear-gradient(90deg, #00b09b, #96c93d);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    /* ================= POPUP ================= */
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.1);
-      background: #fff;
-      width: 400px;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      visibility: hidden;
-      z-index: 2000;
-      transition: 0.3s;
-    }
-
-    .popup.open-popup {
-      visibility: visible;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .popup img {
-      width: 80px;
-      margin-top: -60px;
-    }
-
-    .popup button {
-      margin-top: 30px;
-      padding: 10px 30px;
-      background: #6fd649;
-      border: none;
-      color: #fff;
-      border-radius: 20px;
-      cursor: pointer;
-    }
-
-    @media(max-width:600px) {
-      .input-grid {
-        grid-template-columns: 1fr;
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
-    }
-  </style>
-</head>
 
-<body>
+      body {
+        background-color: #f0f4f8;
+        min-height: 100vh;
+      }
 
-  <nav class="navbar">
-    <div class="left-section">
-      <img src="logo.png" class="logo">
-      <div class="text">
-        <h1>Prestige Institute of Research & Management</h1>
-        <p>Gwalior</p>
-      </div>
-    </div>
+      .navbar {
+        height: 70px;
+        background-color: #153977;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 40px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      }
 
-    <div class="right-section">
-      <div class="profile-container">
-        <button class="profile-btn" id="profileBtn"><i class="fas fa-user"></i></button>
-        <div class="profile-menu" id="profileMenu">
-          <a class="profile-menu-item" href="#">View Profile</a>
-          <a class="profile-menu-item" href="#">Edit Profile</a>
-          <a class="profile-menu-item" href="#">Change Password</a>
+      .left-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .logo {
+        height: 60px;
+      }
+
+      .text h1 {
+        font-size: 18px;
+        color: #fff;
+      }
+
+      .text p {
+        font-size: 12px;
+        color: #cfd8dc;
+      }
+
+      .right-section {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .profile-container {
+        position: relative;
+      }
+
+      .profile-btn {
+        background: #1e5a96;
+        border: none;
+        color: #fff;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+      }
+
+      .profile-menu {
+        position: absolute;
+        top: 55px;
+        right: 0;
+        background: #fff;
+        border-radius: 8px;
+        min-width: 200px;
+        display: none;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .profile-menu.active {
+        display: block;
+      }
+
+      .profile-menu-item {
+        padding: 12px 16px;
+        display: flex;
+        gap: 10px;
+        cursor: pointer;
+        text-decoration: none;
+        color: #333;
+      }
+
+      .profile-menu-item:hover {
+        background: #f5f5f5;
+      }
+
+      .logout-btn {
+        background: #c62828;
+        border: none;
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .form-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .form-header {
+        background: linear-gradient(90deg, #5b86e5, #904e95);
+        padding: 25px;
+        color: #fff;
+        text-align: center;
+      }
+
+      .form-body {
+        padding: 30px;
+      }
+
+      .input-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .input-group label {
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+
+      .required {
+        color: red;
+      }
+
+      .input-group input {
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      .full-width {
+        grid-column: span 2;
+      }
+
+      .submit-btn {
+        margin-top: 20px;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        background: linear-gradient(90deg, #00b09b, #96c93d);
+        color: #fff;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.1);
+        background: #fff;
+        width: 400px;
+        padding: 30px;
+        border-radius: 10px;
+        text-align: center;
+        visibility: hidden;
+        z-index: 2000;
+        transition: 0.3s;
+      }
+
+      .popup.open-popup {
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .popup img {
+        width: 80px;
+        margin-top: -60px;
+      }
+
+      .popup button {
+        margin-top: 30px;
+        padding: 10px 30px;
+        background: #6fd649;
+        border: none;
+        color: #fff;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+
+      @media (max-width: 600px) {
+        .input-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="left-section">
+        <img src="../images/logo.png" class="logo" />
+        <div class="text">
+          <h1>Prestige Institute of Research & Management</h1>
+          <p>Gwalior</p>
         </div>
       </div>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
-  </nav>
 
-  <div class="form-container">
-    <div class="form-header">
-      <h2>Learners’ Support: Advanced & Slow Learners</h2>
-    </div>
-
-    <form class="form-body" id="supportForm">
-      <div class="input-grid">
-
-        <div class="input-group">
-          <label>Criteria Used <span class="required">*</span></label>
-          <input id="criteriaUsed" required>
+      <div class="right-section">
+        <div class="profile-container">
+          <button class="profile-btn" id="profileBtn">
+            <i class="fas fa-user"></i>
+          </button>
+          <div class="profile-menu" id="profileMenu">
+            <a class="profile-menu-item" href="#">View Profile</a>
+            <a class="profile-menu-item" href="#">Edit Profile</a>
+            <a class="profile-menu-item" href="#">Change Password</a>
+          </div>
         </div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </nav>
 
-        <div class="input-group">
-          <label>No. of Slow Learners *</label>
-          <input type="number" id="slowLearnersCount" required>
-        </div>
-
-        <div class="input-group">
-          <label>No. of Advanced Learners *</label>
-          <input type="number" id="advancedLearnersCount" required>
-        </div>
-
-        <div class="input-group">
-          <label>Outcome *</label>
-          <input id="outcome" required>
-        </div>
-
-        <div class="input-group full-width">
-          <label>Measures Taken *</label>
-          <input id="measuresTaken" required>
-        </div>
-
-        <div class="input-group full-width">
-          <label>Evidence Link *</label>
-          <input type="url" id="evidenceLink" required>
-        </div>
-
-        <div class="input-group full-width">
-          <label>Program ID</label>
-          <input id="programId">
-        </div>
-
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Learners’ Support: Advanced & Slow Learners</h2>
       </div>
 
-      <button class="submit-btn" type="submit">Submit Support Details</button>
-    </form>
-  </div>
+      <form class="form-body" id="supportForm">
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Criteria Used <span class="required">*</span></label>
+            <input id="criteriaUsed" required />
+          </div>
 
-  <div class="popup" id="popup">
-    <img src="check.png">
-    <h2>Thank You!</h2>
-    <p>Form submitted successfully.</p>
-    <button onclick="closePopup()">OK</button>
-  </div>
+          <div class="input-group">
+            <label>No. of Slow Learners *</label>
+            <input type="number" id="slowLearnersCount" required />
+          </div>
 
-  <script>
-    const profileBtn = document.getElementById("profileBtn");
-    const profileMenu = document.getElementById("profileMenu");
+          <div class="input-group">
+            <label>No. of Advanced Learners *</label>
+            <input type="number" id="advancedLearnersCount" required />
+          </div>
 
-    profileBtn.onclick = e => {
-      e.stopPropagation();
-      profileMenu.classList.toggle("active");
-    };
+          <div class="input-group">
+            <label>Outcome *</label>
+            <input id="outcome" required />
+          </div>
 
-    document.onclick = () => profileMenu.classList.remove("active");
+          <div class="input-group full-width">
+            <label>Measures Taken *</label>
+            <input id="measuresTaken" required />
+          </div>
 
-    function logout() {
-      localStorage.clear();
-      window.location.href = "index.html";
-    }
+          <div class="input-group full-width">
+            <label>Evidence Link *</label>
+            <input type="url" id="evidenceLink" required />
+          </div>
 
-    const popup = document.getElementById("popup");
-    const form = document.getElementById("supportForm");
+          <div class="input-group full-width">
+            <label>Program ID</label>
+            <input id="programId" />
+          </div>
+        </div>
 
-    function openPopup() { popup.classList.add("open-popup"); }
-    function closePopup() { popup.classList.remove("open-popup"); }
+        <button class="submit-btn" type="submit">Submit Support Details</button>
+      </form>
+    </div>
 
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
+    <div class="popup" id="popup">
+      <img src="check.png" />
+      <h2>Thank You!</h2>
+      <p>Form submitted successfully.</p>
+      <button onclick="closePopup()">OK</button>
+    </div>
 
-      const payload = {
-        criteriaUsed: criteriaUsed.value,
-        slowLearnersCount: +slowLearnersCount.value,
-        advancedLearnersCount: +advancedLearnersCount.value,
-        outcome: outcome.value,
-        measuresTaken: measuresTaken.value,
-        evidenceLink: evidenceLink.value,
-        program_Id: programId.value
+    <script>
+      const profileBtn = document.getElementById("profileBtn");
+      const profileMenu = document.getElementById("profileMenu");
+
+      profileBtn.onclick = (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle("active");
       };
 
-      const token = localStorage.getItem("token");
+      document.onclick = () => profileMenu.classList.remove("active");
 
-      const res = await fetch("/api/learner-support/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token
-        },
-        body: JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        openPopup();
-        form.reset();
-      } else {
-        alert("Submission failed");
+      function logout() {
+        localStorage.clear();
+        window.location.href = "index.html";
       }
-    });
-  </script>
 
-</body>
+      const popup = document.getElementById("popup");
+      const form = document.getElementById("supportForm");
 
+      function openPopup() {
+        popup.classList.add("open-popup");
+      }
+      function closePopup() {
+        popup.classList.remove("open-popup");
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const payload = {
+          criteriaUsed: criteriaUsed.value,
+          slowLearnersCount: +slowLearnersCount.value,
+          advancedLearnersCount: +advancedLearnersCount.value,
+          outcome: outcome.value,
+          measuresTaken: measuresTaken.value,
+          evidenceLink: evidenceLink.value,
+          program_Id: programId.value,
+        };
+
+        const token = localStorage.getItem("token");
+
+        const res = await fetch("/api/learner-support/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify(payload),
+        });
+
+        if (res.ok) {
+          openPopup();
+          form.reset();
+        } else {
+          alert("Submission failed");
+        }
+      });
+    </script>
+  </body>
 </html>

@@ -30,7 +30,7 @@
       background-color: var(--bg-color);
     }
 
-    /* --- Header --- */
+
     header {
       display: flex;
       justify-content: space-between;
@@ -138,7 +138,7 @@
       font-size: 0.9rem;
     }
 
-    /* --- Dashboard Grid --- */
+
     .dashboard-container {
       padding: 40px;
       max-width: 1400px;
@@ -189,11 +189,11 @@
       }
     }
 
-    /* --- Card Styling (Fixed Shadow & Icons) --- */
+
     .card {
       background-color: var(--card-bg);
       border-radius: 18px;
-      /* Slightly more rounded corners */
+
       padding: 25px 20px;
       text-align: center;
       display: flex;
@@ -201,7 +201,7 @@
       justify-content: space-between;
       align-items: center;
       height: 270px;
-      /* Adjusted height */
+
       box-shadow: var(--shadow-card);
       border: 1px solid #eef2f7;
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -212,10 +212,10 @@
 
     .card:hover {
       transform: translateY(-10px);
-      /* Upar uthne ka effect */
+
       background-color: #fff;
       box-shadow: var(--shadow-hover);
-      /* Hover par heavy shadow */
+
       border-color: #e0e0e0;
     }
 
@@ -231,7 +231,7 @@
       z-index: 2;
     }
 
-    /* --- Icon Wrapper --- */
+
     .icon-container {
       flex-grow: 1;
       display: flex;
@@ -243,16 +243,16 @@
 
     .icon-container i {
       font-size: 4rem;
-      /* Icon ka size */
+
       color: #333;
-      /* Icon ka color: Dark Grey (Outline look) */
+
       transition: all 0.3s ease;
 
-      /* Thoda stroke patla dikhane ka trick */
+
       -webkit-text-stroke: 1px transparent;
     }
 
-    /* Hover par Icon Blue ho jayega */
+
     .card:hover .icon-container i {
       color: var(--primary-blue);
       transform: scale(1.1);
@@ -267,7 +267,7 @@
       border-radius: 12px;
       font-size: 0.9rem;
       font-weight: 600;
-      /* Bolder text */
+
       cursor: pointer;
       transition: background 0.3s, transform 0.2s;
       z-index: 2;
@@ -286,7 +286,7 @@
   <header>
     <div class="header-left">
       <div class="logo-section">
-        <img src="logo.png" alt="logo" /> <span>PIMR</span>
+        <img src="../images/logo.png" alt="logo" /> <span>PIMR</span>
       </div>
     </div>
 
@@ -411,7 +411,7 @@
       });
     }
 
-    // --- PC entries modal ---
+
     async function showPcModal() {
       const token = (() => {
         try {
@@ -582,7 +582,7 @@
 
     renderDashboard();
 
-    // --- VAC modal implementation ---
+    // VAC modal implementation
     async function showVacModal() {
       const token = (() => {
         try {

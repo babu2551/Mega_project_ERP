@@ -1,84 +1,93 @@
 import express from "express";
 import EContent from "../models/econtent-model.js";
-import { authMiddleware } from "./auth.js";
+import { authMiddleware } from "../middleware/auth-middleware.js";
+// import upload from "../middleware/multer.js"; // enable if file upload
 
 const router = express.Router();
 
-router.post("/submit", authMiddleware, async (req, res) => {
-  try {
-    const p = req.body || {};
-    const entry = new EContent({
-      faculty: p.faculty || p.facultyName || "",
-      moduleName: p.module || p.moduleName || "",
-      platform: p.platform || "",
-      dateOfLaunch: p.dateOfLaunch || "",
-      link: p.link || "",
-      program_Id: p.program_Id || p.programId || p.programmeCode || "",
-      uploadedFile: req.file ? req.file.filename : null,
-      createdBy: req.user?.id,
-    });
-    const saved = await entry.save();
-    res
-      .status(201)
-      .json({
-        ok: true,
+/* ====== SUBMIT ====== */
+router.post(
+  "/submit",
+  authMiddleware,
+  // upload.single("file"),
+  async (req, res) => {
+    try {
+      const p = req.body || {};
+
+      const entry = new EContent({
+        faculty: p.faculty || p.facultyName || "",
+        moduleName: p.module || p.moduleName || "",
+        platform: p.platform || "",
+        dateOfLaunch: p.dateOfLaunch || "",
+        link: p.link || "",
+        program_Id: p.program_Id || p.programId || p.programmeCode || "",
+        uploadedFile: req.file ? req.file.filename : null,
+        createdBy: req.user.id,
+      });
+
+      const saved = await entry.save();
+
+      return res.status(201).json({
+        success: true,
         id: saved._id.toString(),
         uploadedFile: saved.uploadedFile,
       });
-  } catch (err) {
-    console.error("EContent submit error", err);
-    res
-      .status(500)
-      .json({ error: "Failed to save econtent" });
+    } catch (err) {
+      console.error("EContent submit error", err);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to save econtent",
+      });
+    }
   }
-});
+);
 
+/* ====== LIST ====== */
 router.get("/entries", authMiddleware, async (req, res) => {
   try {
     const q = {};
     if (req.query.programId) q.program_Id = req.query.programId;
-    if (!(req.user && req.user.role === "admin")) q.createdBy = req.user?.id;
 
-    const docs = await EContent.find(q).lean().exec();
-    return res
-      .json(
-        docs.map((d) => ({ id: d._id.toString(), createdAt: d.createdAt, ...d }))
-      );
+    // non-admin → only own entries
+    if (req.user.role !== "admin") q.createdBy = req.user.id;
+
+    const docs = await EContent.find(q).lean();
+
+    return res.json(
+      docs.map((d) => ({
+        id: d._id.toString(),
+        createdAt: d.createdAt,
+        ...d,
+      }))
+    );
   } catch (err) {
     console.error("EContent entries error", err);
-    res
-      .status(500)
-      .json({ error: "Failed to fetch econtent entries" });
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch econtent entries",
+    });
   }
 });
 
+/* ====== READ ONE ====== */
 router.get("/entries/:id", authMiddleware, async (req, res) => {
   try {
-    const id = req.params.id;
-    const doc = await EContent.findById(id).lean().exec();
+    const doc = await EContent.findById(req.params.id).lean();
 
     if (!doc)
-      return res
-        .status(404)
-        .json({ error: "Not found" });
-    if (
-      req.user.role !== "admin" &&
-      String(doc.createdBy || "") !== String(req.user.id)
-    )
-      return res
-        .status(403)
-        .json({ error: "Forbidden" });
-    return res
-      .json({
-        id: doc._id.toString(),
-        createdAt: doc.createdAt,
-        ...doc,
-      });
+      return res.status(404).json({ success: false, message: "Entry not found" });
+
+    if (req.user.role !== "admin" && String(doc.createdBy) !== String(req.user.id))
+      return res.status(403).json({ success: false, message: "Forbidden" });
+
+    return res.json({
+      id: doc._id.toString(),
+      createdAt: doc.createdAt,
+      ...doc,
+    });
   } catch (err) {
     console.error("EContent read error", err);
-    res
-      .status(500)
-      .json({ error: "Failed to read econtent entry" });
+    return res.status(500).json({ success: false, message: "Failed to read econtent entry" });
   }
 });
 

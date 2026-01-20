@@ -12,7 +12,9 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        required: true
+        required: true,
+        enum: ["faculty", "pc", "vac", "admin"],
+        default: "faculty"
     },
 });
 

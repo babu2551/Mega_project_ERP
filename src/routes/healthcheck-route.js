@@ -3,7 +3,7 @@ import { healthCheck } from "../controllers/healthcheck.controller.js";
 
 const router = Router();
 
-router.route("/").get(healthCheck);
-// router.route("/instagram").get(healthCheck);
+/* ====== HEALTHCHECK ====== */
+router.get("/", healthCheck);
 
 export default router;

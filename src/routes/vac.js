@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import Student from "../models/vac-form-model.js";
 import VacEntry from "../models/vac-model.js";
-import { authMiddleware } from "./auth.js";
+import { authMiddleware } from "../middleware/auth-middleware.js";
 
 const router = express.Router();
 

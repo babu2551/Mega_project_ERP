@@ -3,20 +3,21 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-import multer from "multer";
 import cookieParser from "cookie-parser";
 import connectDB from "./db/index.js";
 import authRoutes from "./routes/auth.js";
 import vacRoutes from "./routes/vac.js";
 import pcRoutes from "./routes/pc.js";
-import Student from "./models/vac-form-model.js";
-import VacEntry from "./models/vac-model.js";
 import econtentRoutes from "./routes/econtent.js";
 import capacityRoutes from "./routes/capacity.js";
 import teachingRoutes from "./routes/teaching.js";
 import experientialRoutes from "./routes/experiential.js";
 import libraryRoutes from "./routes/library.js";
 import learnerRoutes from "./routes/learner-support.js";
+import { errorHandler, notFoundHandler } from "./middleware/index.js";
+
+import Student from "./models/vac-form-model.js";
+import VacEntry from "./models/vac-model.js";
 
 dotenv.config();
 connectDB();
@@ -26,89 +27,50 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+// paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Setup multer for file uploads
-const uploadDir = path.join(__dirname, "uploads");
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const timestamp = Date.now();
-    const randomStr = Math.random().toString(36).substring(7);
-    cb(null, `${timestamp}-${randomStr}-${file.originalname}`);
-  },
-});
-
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const allowedMimes = [
-      "application/pdf",
-      "image/jpeg",
-      "image/png",
-      "image/jpg",
-      "text/csv",
-      "application/vnd.ms-excel",
-    ];
-    if (allowedMimes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type"));
-    }
-  },
-});
-
+// static files
 app.use(express.static(path.join(__dirname, "public")));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use("/uploads", express.static(uploadDir));
+app.use("/images", express.static(path.join(__dirname, "images")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// routes
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/vac", upload.single("certificateUpload"), vacRoutes);
-app.use("/api/pc", upload.single("brochureFile"), pcRoutes);
-app.use("/api/econtent", upload.single("documentFile"), econtentRoutes);
-app.use("/api/capacity", upload.single("documentFile"), capacityRoutes);
-app.use("/api/teaching", upload.single("documentFile"), teachingRoutes);
-app.use("/api/experiential", upload.single("documentFile"), experientialRoutes);
-app.use("/api/library", upload.single("documentFile"), libraryRoutes);
-app.use("/api/learner-support", upload.single("documentFile"), learnerRoutes);
+app.use("/api/vac", vacRoutes);
+app.use("/api/pc", pcRoutes);
+app.use("/api/econtent", econtentRoutes);
+app.use("/api/capacity", capacityRoutes);
+app.use("/api/teaching", teachingRoutes);
+app.use("/api/experiential", experientialRoutes);
+app.use("/api/library", libraryRoutes);
+app.use("/api/learner-support", learnerRoutes);
 
-// Simple DB health endpoint — returns mongoose connection status and total student count if available
+// DB status endpoint
 app.get("/api/db/status", async (req, res) => {
   try {
-    const state =
-      (global && global.mongooseState) ||
-      (Student && Student.db && Student.db.readyState) ||
-      0;
-    const ready = Student && Student.db && Student.db.readyState === 1;
+    const ready = Student.db.readyState === 1;
     let studentCount = null;
     let entryCount = null;
     if (ready) {
-      try {
-        studentCount = await Student.countDocuments({}).exec();
-      } catch (e) {
-        studentCount = null;
-      }
-      try {
-        entryCount = await VacEntry.countDocuments({}).exec();
-      } catch (e) {
-        entryCount = null;
-      }
+      studentCount = await Student.countDocuments({});
+      entryCount = await VacEntry.countDocuments({});
     }
-    res.json({ ok: true, ready, state, studentCount, entryCount });
+    res.json({ ok: true, ready, studentCount, entryCount });
   } catch (err) {
-    console.error("db status", err);
-    res.status(500).json({ ok: false, error: "failed" });
+    console.error(err);
+    res.status(500).json({ ok: false, error: "Failed" });
   }
 });
 
+// 404 & global error handler
+app.use(notFoundHandler);
+app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running at http://localhost:${process.env.PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

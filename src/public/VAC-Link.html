@@ -22,7 +22,7 @@
       padding: 20px;
     }
 
-    /* NAVBAR */
+
     .navbar {
       height: 70px;
       background: #153977;
@@ -114,7 +114,7 @@
       cursor: pointer;
     }
 
-    /* CARD */
+
     .container {
       max-width: 1200px;
       margin: auto;
@@ -266,10 +266,10 @@
 
 <body>
 
-  <!-- NAVBAR -->
+
   <nav class="navbar">
     <div class="left-section">
-      <img src="logo-removebg-preview (2)(1).png" class="logo" />
+      <img src="../images/logo.png" class="logo" />
       <div class="text">
         <h1>Prestige Institute of Research & Management</h1>
         <p>Gwalior</p>
@@ -291,7 +291,7 @@
     </div>
   </nav>
 
-  <!-- FORM -->
+
   <div class="container">
     <div class="header">
       <h1>Value-Added Courses (VAC)</h1>
@@ -377,7 +377,7 @@
       });
 
       const data = await res.json();
-      const link = `vac-form.html?vacId=${data.id || Date.now()}`;
+      const link = `Student-Registration-form.html?vacId=${data.id || Date.now()}`;
 
       studentLink.href = link;
       studentLink.textContent = link;

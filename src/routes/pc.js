@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 import VacEntryModel from "../models/vac-model.js";
 import PcDetailsModel from "../models/pc_model.js";
-import { authMiddleware } from "./auth.js";
+import { authMiddleware } from "../middleware/auth-middleware.js";
 
 const router = express.Router();
 

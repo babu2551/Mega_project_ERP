@@ -1,40 +1,49 @@
 import jwt from "jsonwebtoken";
-import { ApiError } from "../utils/api-error.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
-export const authMiddleware = (req, res, next) => {
+// Helper: extract token from multiple sources
+const extractToken = (req) => {
     const header = req.headers.authorization || req.headers.Authorization || "";
-    const token = header && header.startsWith("Bearer ") ? header.split(" ")[1] : header;
+    if (header.startsWith("Bearer ")) return header.split(" ")[1];
+    if (req.cookies?.token) return req.cookies.token;
+    if (req.headers["x-access-token"]) return req.headers["x-access-token"];
+    if (req.query?.token) return req.query.token;
+    if (req.body?.token) return req.body.token;
+    return null;
+};
 
-    if (!token) {
-        return res.status(401).json({ error: "No token, authorization denied" });
-    }
+// Middleware: authentication required
+export const authMiddleware = (req, res, next) => {
+    const token = extractToken(req);
+    if (!token) return res.status(401).json({ error: "No token, authorization denied" });
 
     try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
+        req.user = jwt.verify(token, JWT_SECRET);
         return next();
     } catch (err) {
-        return res.status(401).json({ error: "Token is not valid" });
+        return res.status(401).json({ error: "Token is invalid or expired" });
     }
 };
 
+// Middleware: optional authentication
 export const optionalAuth = (req, res, next) => {
-    const header = req.headers.authorization || req.headers.Authorization || "";
-    const token = header && header.startsWith("Bearer ") ? header.split(" ")[1] : header;
+    const token = extractToken(req);
     if (!token) return next();
     try {
         req.user = jwt.verify(token, JWT_SECRET);
-    } catch (e) {
-        // ignore invalid token for optional auth
+    } catch (err) {
+        // ignore invalid token
     }
     return next();
 };
 
+// Middleware: role-based access
 export const requireRole = (roles) => (req, res, next) => {
     if (!req.user) return res.status(401).json({ error: "Not authenticated" });
-    const arr = Array.isArray(roles) ? roles : [roles];
-    if (!arr.includes(req.user.role)) return res.status(403).json({ error: "Forbidden" });
+    const allowedRoles = Array.isArray(roles) ? roles : [roles];
+    if (!req.user.role || !allowedRoles.includes(req.user.role)) {
+        return res.status(403).json({ error: "Forbidden: insufficient role" });
+    }
     return next();
 };
