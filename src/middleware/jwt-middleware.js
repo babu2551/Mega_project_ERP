@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret_key";
 
-// Helper: extract token from multiple sources
+//  extract token from multiple sources
 const extractToken = (req) => {
     const header = req.headers.authorization || req.headers.Authorization || "";
     if (header.startsWith("Bearer ")) return header.split(" ")[1];
@@ -16,7 +16,8 @@ const extractToken = (req) => {
 // Middleware: authentication required
 export const authMiddleware = (req, res, next) => {
     const token = extractToken(req);
-    if (!token) return res.status(401).json({ error: "No token, authorization denied" });
+    if (!token)
+        return res.status(401).json({ error: "No token, authorization denied" });
 
     try {
         req.user = jwt.verify(token, JWT_SECRET);
