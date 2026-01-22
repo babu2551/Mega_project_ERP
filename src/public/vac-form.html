@@ -4,347 +4,496 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VAC Submit Form</title>
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  <title>VAC Form</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Segoe UI, Roboto, sans-serif
     }
 
     body {
-      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
       padding: 20px;
     }
 
-
-    .navbar {
-      height: 70px;
-      background: #153977;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 40px;
-      margin-bottom: 20px;
-    }
-
-    .left-section {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .logo {
-      height: 60px
-    }
-
-    .text h1 {
-      color: #fff;
-      font-size: 18px
-    }
-
-    .text p {
-      color: #cfd8dc;
-      font-size: 12px
-    }
-
-    .profile-btn {
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background: #1e5a96;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    .profile-container {
-      position: relative
-    }
-
-    .profile-menu {
-      position: absolute;
-      top: 55px;
-      right: 0;
-      background: #fff;
-      border-radius: 8px;
-      min-width: 200px;
-      display: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
-    }
-
-    .profile-menu.active {
-      display: block
-    }
-
-    .profile-menu-item {
-      padding: 12px 16px;
-      text-decoration: none;
-      color: #333;
-      display: flex;
-      gap: 10px;
-    }
-
-    .profile-menu-item:hover {
-      background: #f5f5f5
-    }
-
-    .logout-btn {
-      background: #c62828;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-left: 15px;
-    }
-
-    /* ===== FORM ===== */
     .container {
       max-width: 1200px;
-      margin: auto;
-      background: #fff;
+      margin: 0 auto;
+      background: white;
       border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, .1);
     }
 
     .header {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      padding: 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+      padding: 30px;
       text-align: center;
     }
 
+    .header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
     .form-container {
-      padding: 40px
+      padding: 40px;
+    }
+
+    .section-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    .section-table th,
+    .section-table td {
+      padding: 16px 20px;
+      text-align: left;
+      border-bottom: 1px solid #e1e5e9;
+    }
+
+    .section-table th {
+      background: #f8f9fa;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-group input {
+      padding: 12px 16px;
+      border: 2px solid #e1e5e9;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-group input.error {
+      border-color: #e74c3c !important;
+      background: #fdf2f2;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
     }
 
     .course-section {
       background: #f8f9fa;
       border-radius: 12px;
       padding: 24px;
+      margin-bottom: 24px;
       border: 2px solid #e9ecef;
     }
 
     .course-title {
       font-size: 18px;
       font-weight: 600;
+      color: #333;
       margin-bottom: 20px;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .form-group label {
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: block
-    }
-
-    .form-group input {
-      padding: 12px;
-      border-radius: 8px;
-      border: 2px solid #e1e5e9;
-    }
-
-    .form-group input.error {
-      border-color: #e74c3c;
-      background: #fdf2f2;
-    }
-
     .button-group {
-      margin-top: 30px
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .submit-btn,
+    .view-btn {
+      justify-content: center;
+      flex: 1;
+      min-width: 200px;
+      padding: 18px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
     .submit-btn {
-      width: 100%;
-      padding: 18px;
-      background: linear-gradient(135deg, #28a745, #20c997);
-      border: none;
+      background: #1b2d83;
       color: white;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 12px;
-      cursor: pointer;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(40, 167, 69, 0.3);
+    }
+
+    .view-btn {
+      background: linear-gradient(135deg, #fd7e14 0%, #f76707 100%);
+      color: white;
+    }
+
+    .view-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(253, 126, 20, 0.3);
     }
 
     .submit-btn:disabled {
-      opacity: .6;
-      cursor: not-allowed
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .student-link {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 14px 28px;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      margin: 20px 0;
+      transition: all 0.3s ease;
+    }
+
+    .student-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .copy-btn {
+      background: #6b7280;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: #4b5563;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-container {
+        padding: 24px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+
+    /* popup  section*/
+
+    /* .btn {
+            padding: 10px 60px;
+            background: #fff;
+            border: 0;
+            outline: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: 500;
+            border-radius: 30px;
+        } */
 
     .popup {
       width: 400px;
       background: #fff;
-      border-radius: 8px;
-      position: fixed;
-      top: 50%;
+      border-radius: 6px;
+      position: absolute;
+      top: 0;
       left: 50%;
-      transform: translate(-50%, -50%) scale(.1);
+      transform: translate(-50%, -50%) scale(0.1);
       text-align: center;
-      padding: 30px;
+      padding: 0 30px 30px;
+      color: #333;
       visibility: hidden;
-      transition: .4s;
-      z-index: 2000;
+      transition: transform 0.4s, top 0.4s;
     }
 
-    .popup.open-popup {
+    .open-popup {
       visibility: visible;
+      top: 50%;
       transform: translate(-50%, -50%) scale(1);
     }
 
-    .popup button {
-      margin-top: 20px;
-      padding: 10px;
-      width: 100%;
-      background: #6fd649;
-      border: none;
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
+    .popup img {
+      width: 100px;
+      margin-top: -50px;
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
-    @media(max-width:768px) {
-      .form-container {
-        padding: 24px
-      }
+    .popup h2 {
+      font-size: 38px;
+      font-weight: 500;
+      margin: 30px 0 10px;
+    }
+
+    .popup button {
+      width: 100%;
+      margin-top: 50px;
+      padding: 10px 0;
+      background: #6fd649;
+      color: #fff;
+      border: 0;
+      outline: none;
+      border-radius: 20px;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
 
 <body>
-
-
-  <nav class="navbar">
-    <div class="left-section">
-      <img src="../images/logo.png" class="logo">
-      <div class="text">
-        <h1>Prestige Institute of Research & Management</h1>
-        <p>Gwalior</p>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center">
-      <div class="profile-container">
-        <button class="profile-btn" id="profileBtn"><i class="fa fa-user"></i></button>
-        <div class="profile-menu" id="profileMenu">
-          <a class="profile-menu-item" href="#">View Profile</a>
-          <a class="profile-menu-item" href="#">Change Password</a>
-        </div>
-      </div>
-      <button class="logout-btn" onclick="logout()">Logout</button>
-    </div>
-  </nav>
-
-
   <div class="container">
     <div class="header">
       <h1>VAC Submit Form</h1>
     </div>
 
     <div class="form-container">
-      <div class="course-section">
-        <div class="course-title">VAC Course Details</div>
 
-        <div class="form-grid">
-          <input id="courseName" placeholder="Course Name *">
-          <input id="courseCode" placeholder="VAC Course Code *">
-          <input id="programId" placeholder="Program ID (optional)">
-          <input id="duration" type="number" placeholder="Duration (Hours) *">
-          <input id="timesOffered" type="number" placeholder="Times Offered *">
-          <input id="studentsEnrolled" placeholder="Students Enrolled">
-          <input id="studentsCompleted" placeholder="Students Completed">
-          <input id="brochure" type="file" accept=".pdf,.jpg,.jpeg,.png">
-          <input id="coordinator" placeholder="Coordinator Name *">
-        </div>
+      <div id="coursesContainer">
+        <div class="course-section" data-course-id="1">
+          <div class="course-title">Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="courseName1">Course Name *</label>
+              <input type="text" id="courseName1" placeholder="e.g., Web Development" required>
+              <div class="error-message" id="courseNameError1">Course name is required</div>
+            </div>
 
-        <div class="button-group">
-          <button id="submitVacBtn" class="submit-btn">📩 Send Data</button>
+            <div class="form-group">
+              <label for="courseCode1">VAC Course Code *</label>
+              <input type="text" id="courseCode1" placeholder="e.g., VAC001" required>
+              <div class="error-message" id="courseCodeError1">Course code is required</div>
+            </div>
+
+            <div class="form-group">
+              <label for="programId1">Program ID (optional)</label>
+              <input type="text" id="programId1" placeholder="Program ID or UUID" />
+            </div>
+
+            <div class="form-group">
+              <label for="duration1">Duration (Hours) *</label>
+              <input type="number" id="duration1" min="1" placeholder="e.g., 30" required>
+              <div class="error-message" id="durationError1">Duration must be at least 1 hour</div>
+            </div>
+
+            <div class="form-group">
+              <label for="timesOffered1">No. of Times Offered *</label>
+              <input type="number" id="timesOffered1" min="1" placeholder="e.g., 2" required>
+              <div class="error-message" id="timesError1">Must be offered at least once</div>
+            </div>
+
+            <div class="form-group">
+              <label for="studentsEnrolled1">Students Enrolled</label>
+              <input type="text" id="studentsEnrolled1" placeholder="e.g., 45 or John, Jane...">
+            </div>
+
+            <div class="form-group">
+              <label for="studentsCompleted1">Students Completed</label>
+              <input type="text" id="studentsCompleted1" placeholder="e.g., 42 or list...">
+            </div>
+
+            <div class="form-group">
+              <label for="brochureLink1">Brochure/Certificate Link</label>
+              <input type="url" id="brochureLink1" placeholder="https://example.com/brochure.pdf">
+            </div>
+
+            <div class="form-group">
+              <label for="coordinator1">VAC Coordinator Name *</label>
+              <input type="text" id="coordinator1" placeholder="e.g., Dr. John Doe" required>
+              <div class="error-message" id="coordinatorError1">Coordinator name is required</div>
+            </div>
+
+            <div class="form-group">
+              <label for="coordinator1">Upload Brochure / Certificate (PDF, JPG, PNG, CSV)</label>
+              <input type="file" id="certificateUpload" name="certificateUpload" accept=".pdf,.jpg,.jpeg,.png, .csv"
+                required />
+              <div class="error-message" id="certificateUpload">Upload Documents Here</div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
+      <div class="button-group">
+        <button id="submitVacBtn" class="submit-btn"> Send Data</button>
 
-  <div class="popup" id="popup">
-    <h2>Thank You!</h2>
-    <p>Your VAC data was submitted successfully.</p>
-    <button onclick="closePopup()">OK</button>
-  </div>
+        <div class="popup" id="popup">
+          <img src="../images/check.jpg" alt="Check Mark">
+          <h2>Thank You!</h2>
+          <p>Your Form Successfully Submitted. Thanks!</p>
+          <button type="button" onclick="closePopup()">OK</button>
+        </div>
+      </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
+      <script>
 
-      const submitBtn = document.getElementById("submitVacBtn");
-      const popup = document.getElementById("popup");
-
-      function openPopup() { popup.classList.add("open-popup") }
-      window.closePopup = () => popup.classList.remove("open-popup")
-
-      submitBtn.onclick = () => {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending...";
-
-        const courseName = courseNameEl.value.trim();
-        const courseCode = courseCodeEl.value.trim();
-        const duration = durationEl.value;
-        const timesOffered = timesOfferedEl.value;
-        const coordinator = coordinatorEl.value.trim();
-
-        if (!courseName || !courseCode || !duration || !timesOffered || !coordinator) {
-          alert("Please fill all required fields");
-          submitBtn.disabled = false;
-          submitBtn.textContent = "📩 Send Data";
-          return;
+        // popup section
+        let popup = document.getElementById("popup");
+        function openPopup() {
+          popup.classList.add("open-popup");
+        }
+        function closePopup() {
+          popup.classList.remove("open-popup");
         }
 
-        const token = localStorage.getItem("token");
-        if (!token) {
-          alert("Please login first");
-          submitBtn.disabled = false;
-          submitBtn.textContent = "📩 Send Data";
-          return;
-        }
+        (function () {
+          const submitBtn = document.getElementById("submitVacBtn");
 
-        const entry = {
-          id: "local-" + Date.now(),
-          courses: [{
-            courseName, courseCode,
-            duration: +duration,
-            timesOffered: +timesOffered,
-            studentsEnrolled: studentsEnrolled.value,
-            studentsCompleted: studentsCompleted.value,
-            coordinator
-          }]
-        };
+          async function submitVac() {
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Sending...";
 
-        const existing = JSON.parse(localStorage.getItem("vac:local") || "[]");
-        existing.unshift(entry);
-        localStorage.setItem("vac:local", JSON.stringify(existing));
+            const courseName = document.getElementById("courseName1").value.trim();
+            const courseCode = document.getElementById("courseCode1").value.trim();
+            const duration = document.getElementById("duration1").value;
+            const timesOffered = document.getElementById("timesOffered1").value;
+            const studentsEnrolled = document.getElementById("studentsEnrolled1").value.trim();
+            const studentsCompleted = document.getElementById("studentsCompleted1").value.trim();
+            const brochureInput = document.getElementById("certificateUpload");
+            const coordinator = document.getElementById("coordinator1").value.trim();
 
-        openPopup();
-        window.location.href = "pcdashboard.html";
-      };
+            if (!courseName || !courseCode || !duration || !timesOffered || !coordinator) {
+              alert("Please fill required fields: Course Name, Course Code, Duration, Times Offered, Coordinator");
+              submitBtn.disabled = false;
+              submitBtn.textContent = "📩 Send To Program-Coordinator ";
+              return;
+            }
 
-    });
+            let brochureLink = "";
+            if (brochureInput && brochureInput.files && brochureInput.files.length) {
+              const f = brochureInput.files[0];
+              const name = f.name || '';
+              const ext = name.split('.').pop().toLowerCase();
+              if (ext === 'csv') {
+                alert('CSV files are not accepted. Please upload PDF, JPG or PNG files only.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📩 Send To Program-Coordinator ';
+                return;
+              }
+              brochureLink = name;
+            }
 
-    function logout() {
-      localStorage.clear();
-      window.location.href = "index.html";
-    }
-  </script>
+            const payload = {
+              program_Id: (document.getElementById('programId1') && document.getElementById('programId1').value) ? document.getElementById('programId1').value.trim() : "",
+              courses: [
+                {
+                  courseName,
+                  courseCode,
+                  duration: Number(duration) || 0,
+                  timesOffered: Number(timesOffered) || 0,
+                  studentsEnrolled,
+                  studentsCompleted,
+                  brochureLink,
+                  coordinator,
+                },
+              ],
+            };
 
+            const token = (() => {
+              try {
+                return localStorage.getItem("token");
+              } catch (e) {
+                return null;
+              }
+            })();
+
+            if (!token) {
+              alert("You must be logged in to submit a VAC entry. Please login first.");
+              submitBtn.disabled = false;
+              submitBtn.textContent = "📩 Send To Program-Coordinator ";
+              return;
+            }
+
+            try {
+              // Save VAC entry to localStorage instead of sending to DB
+              const localEntry = {
+                id: 'local-' + Date.now(),
+                createdAt: new Date().toISOString(),
+                courses: payload.courses,
+                local: true
+              };
+              const existing = JSON.parse(localStorage.getItem('vac:local') || '[]');
+              existing.unshift(localEntry);
+              localStorage.setItem('vac:local', JSON.stringify(existing));
+
+              alert('VAC entry saved locally and will appear on your dashboard.');
+              openPopup();
+              window.location.href = 'pcdashboard.html';
+            } catch (err) {
+              console.error(err);
+              alert('Error while saving VAC entry locally.');
+              submitBtn.disabled = false;
+              submitBtn.textContent = '📩 Send To Program-Coordinator ';
+            }
+          }
+
+          submitBtn.addEventListener("click", submitVac);
+        })();
+      </script>
 </body>
 
 </html>

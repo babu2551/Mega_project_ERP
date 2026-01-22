@@ -1,334 +1,336 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Experiential / Participative / Problem-Solving Components</title>
 
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiential / Participative / Problem-Solving Components</title>
 
-    <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-      body {
-        background-color: #f0f4f8;
-        min-height: 100vh;
-      }
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-      .navbar {
-        height: 70px;
-        background-color: #153977;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 40px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      }
+    body {
+      background-color: #f0f4f8;
+      min-height: 100vh;
+    }
 
-      .left-section {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-      }
+    .navbar {
+      height: 70px;
+      background-color: #153977;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    }
 
-      .logo {
-        height: 55px;
-      }
+    .left-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
 
-      .text h1 {
-        font-size: 16px;
-        color: white;
-      }
+    .logo {
+      height: 55px;
+    }
 
-      .text p {
-        font-size: 12px;
-        color: #cfd8dc;
-      }
+    .text h1 {
+      font-size: 16px;
+      color: white;
+    }
 
-      .right-section {
-        display: flex;
-        gap: 20px;
-        align-items: center;
-      }
+    .text p {
+      font-size: 12px;
+      color: #cfd8dc;
+    }
 
-      .profile-container {
-        position: relative;
-      }
+    .right-section {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
 
-      .profile-btn {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        border: none;
-        background: #1e5a96;
-        color: white;
-        cursor: pointer;
-        font-size: 18px;
-      }
+    .profile-container {
+      position: relative;
+    }
 
-      .profile-menu {
-        position: absolute;
-        top: 55px;
-        right: 0;
-        width: 200px;
-        background: white;
-        border-radius: 8px;
-        display: none;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-      }
+    .profile-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      background: #1e5a96;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+    }
 
-      .profile-menu.active {
-        display: block;
-      }
+    .profile-menu {
+      position: absolute;
+      top: 55px;
+      right: 0;
+      width: 200px;
+      background: white;
+      border-radius: 8px;
+      display: none;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
 
-      .profile-menu-item {
-        padding: 12px 16px;
-        display: flex;
-        gap: 10px;
-        text-decoration: none;
-        color: #333;
-        border-bottom: 1px solid #eee;
-      }
+    .profile-menu.active {
+      display: block;
+    }
 
-      .profile-menu-item:hover {
-        background: #f5f5f5;
-      }
+    .profile-menu-item {
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      text-decoration: none;
+      color: #333;
+      border-bottom: 1px solid #eee;
+    }
 
-      .logout-btn {
-        background: #c62828;
-        color: white;
-        border: none;
-        padding: 10px 18px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
+    .profile-menu-item:hover {
+      background: #f5f5f5;
+    }
 
-      .form-wrapper {
-        display: flex;
-        justify-content: center;
-        padding: 30px 20px;
-      }
+    .logout-btn {
+      background: rgba(251, 248, 248, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 10px 22px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      transition: all 0.3s ease;
+    }
 
-      .form-container {
-        background: white;
-        width: 100%;
-        max-width: 900px;
-        border-radius: 15px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-      }
+    .form-wrapper {
+      display: flex;
+      justify-content: center;
+      padding: 30px 20px;
+    }
 
-      .form-header {
-        background: linear-gradient(90deg, #5b86e5, #904e95);
-        padding: 25px;
-        text-align: center;
-        color: white;
-      }
+    .form-container {
+      background: white;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
 
-      .form-body {
-        padding: 30px;
-      }
+    .form-header {
+      background: linear-gradient(90deg, #5b86e5, #904e95);
+      padding: 25px;
+      text-align: center;
+      color: white;
+    }
 
+    .form-body {
+      padding: 30px;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .input-group label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .required {
+      color: red;
+    }
+
+    .input-group input {
+      font-size: medium;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .submit-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(90deg, #00b09b, #96c93d);
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.1);
+      width: 400px;
+      background: white;
+      border-radius: 10px;
+      padding: 30px;
+      text-align: center;
+      visibility: hidden;
+      transition: 0.4s;
+      z-index: 2000;
+    }
+
+    .popup.open-popup {
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .popup img {
+      width: 80px;
+      margin-bottom: 15px;
+    }
+
+    .popup button {
+      margin-top: 20px;
+      padding: 10px 30px;
+      border: none;
+      background: #6fd649;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
       .input-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-
-      .input-group label {
-        font-weight: 600;
-        margin-bottom: 6px;
-        display: block;
-      }
-
-      .required {
-        color: red;
-      }
-
-      .input-group input {
-        padding: 12px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        width: 100%;
+        grid-template-columns: 1fr;
       }
 
       .full-width {
-        grid-column: span 2;
+        grid-column: span 1;
       }
+    }
+  </style>
+</head>
 
-      .submit-btn {
-        margin-top: 20px;
-        width: 100%;
-        padding: 14px;
-        background: linear-gradient(90deg, #00b09b, #96c93d);
-        border: none;
-        color: white;
-        font-size: 16px;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-
-      .popup {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(0.1);
-        width: 400px;
-        background: white;
-        border-radius: 10px;
-        padding: 30px;
-        text-align: center;
-        visibility: hidden;
-        transition: 0.4s;
-        z-index: 2000;
-      }
-
-      .popup.open-popup {
-        visibility: visible;
-        transform: translate(-50%, -50%) scale(1);
-      }
-
-      .popup img {
-        width: 80px;
-        margin-bottom: 15px;
-      }
-
-      .popup button {
-        margin-top: 20px;
-        padding: 10px 30px;
-        border: none;
-        background: #6fd649;
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-      }
-
-      @media (max-width: 600px) {
-        .input-grid {
-          grid-template-columns: 1fr;
-        }
-
-        .full-width {
-          grid-column: span 1;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <nav class="navbar">
-      <div class="left-section">
-        <img src="../images/logo.png" class="logo" />
-        <div class="text">
-          <h1>Prestige Institute of Research & Management</h1>
-          <p>Gwalior</p>
-        </div>
-      </div>
-
-      <div class="right-section">
-        <div class="profile-container">
-          <button class="profile-btn" id="profileBtn">
-            <i class="fas fa-user"></i>
-          </button>
-          <div class="profile-menu" id="profileMenu">
-            <a class="profile-menu-item" href="#">View Profile</a>
-            <a class="profile-menu-item" href="#">Edit Profile</a>
-            <a class="profile-menu-item" href="#">Change Password</a>
-          </div>
-        </div>
-        <button class="logout-btn">Logout</button>
-      </div>
-    </nav>
-
-    <div class="form-wrapper">
-      <div class="form-container">
-        <div class="form-header">
-          <h2>Experiential / Participative / Problem-Solving Components</h2>
-        </div>
-
-        <form class="form-body" id="componentForm">
-          <div class="input-grid">
-            <div class="input-group">
-              <label>Component Type <span class="required">*</span></label>
-              <input type="text" required />
-            </div>
-
-            <div class="input-group">
-              <label>Objective <span class="required">*</span></label>
-              <input type="text" required />
-            </div>
-
-            <div class="input-group">
-              <label>CO Mapped <span class="required">*</span></label>
-              <input type="text" required />
-            </div>
-
-            <div class="input-group">
-              <label>Rubrics <span class="required">*</span></label>
-              <input type="text" required />
-            </div>
-
-            <div class="input-group">
-              <label
-                >Evidence Upload Link <span class="required">*</span></label
-              >
-              <input type="url" required />
-            </div>
-
-            <div class="input-group">
-              <label>Report Submitted <span class="required">*</span></label>
-              <input type="text" required />
-            </div>
-
-            <div class="input-group full-width">
-              <label>Program ID (Optional)</label>
-              <input type="text" />
-            </div>
-          </div>
-
-          <button class="submit-btn">Submit Component Details</button>
-        </form>
+<body>
+  <nav class="navbar">
+    <div class="left-section">
+      <img src="../images/logo.png" class="logo" />
+      <div class="text">
+        <h1>Prestige Institute of Research & Management</h1>
+        <p>Gwalior</p>
       </div>
     </div>
 
-    <div class="popup" id="popup">
-      <img src="check.png" />
-      <h2>Thank You!</h2>
-      <p>Your form has been submitted successfully.</p>
-      <button onclick="closePopup()">OK</button>
+    <div class="right-section">
+      <div class="profile-container">
+        <button class="profile-btn" id="profileBtn">
+          <i class="fas fa-user"></i>
+        </button>
+        <div class="profile-menu" id="profileMenu">
+          <a class="profile-menu-item" href="#">View Profile</a>
+          <a class="profile-menu-item" href="#">Edit Profile</a>
+          <a class="profile-menu-item" href="#">Change Password</a>
+        </div>
+      </div>
+      <button class="logout-btn">Logout</button>
     </div>
+  </nav>
 
-    <script>
-      const profileBtn = document.getElementById("profileBtn");
-      const profileMenu = document.getElementById("profileMenu");
+  <div class="form-wrapper">
+    <div class="form-container">
+      <div class="form-header">
+        <h2>Experiential / Participative / Problem-Solving Components</h2>
+      </div>
 
-      profileBtn.onclick = (e) => {
-        e.stopPropagation();
-        profileMenu.classList.toggle("active");
-      };
-      document.onclick = () => profileMenu.classList.remove("active");
+      <form class="form-body" id="componentForm">
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Component Type <span class="required">*</span></label>
+            <input type="text" required />
+          </div>
 
-      const form = document.getElementById("componentForm");
-      const popup = document.getElementById("popup");
+          <div class="input-group">
+            <label>Objective <span class="required">*</span></label>
+            <input type="text" required />
+          </div>
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        popup.classList.add("open-popup");
-        form.reset();
-      });
+          <div class="input-group">
+            <label>CO Mapped <span class="required">*</span></label>
+            <input type="text" required />
+          </div>
 
-      function closePopup() {
-        popup.classList.remove("open-popup");
-      }
-    </script>
-  </body>
+          <div class="input-group">
+            <label>Rubrics <span class="required">*</span></label>
+            <input type="text" required />
+          </div>
+
+          <div class="input-group">
+            <label>Evidence Upload Link <span class="required">*</span></label>
+            <input type="url" required />
+          </div>
+
+          <div class="input-group">
+            <label>Report Submitted <span class="required">*</span></label>
+            <input type="text" required />
+          </div>
+
+          <div class="input-group full-width">
+            <label>Program ID (Optional)</label>
+            <input type="text" />
+          </div>
+        </div>
+
+        <button class="submit-btn">Submit Component Details</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="popup" id="popup">
+    <img src="check.png" />
+    <h2>Thank You!</h2>
+    <p>Your form has been submitted successfully.</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+
+  <script>
+    const profileBtn = document.getElementById("profileBtn");
+    const profileMenu = document.getElementById("profileMenu");
+
+    profileBtn.onclick = (e) => {
+      e.stopPropagation();
+      profileMenu.classList.toggle("active");
+    };
+    document.onclick = () => profileMenu.classList.remove("active");
+
+    const form = document.getElementById("componentForm");
+    const popup = document.getElementById("popup");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      popup.classList.add("open-popup");
+      form.reset();
+    });
+
+    function closePopup() {
+      popup.classList.remove("open-popup");
+    }
+  </script>
+</body>
+
 </html>
